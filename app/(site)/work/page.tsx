@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { ClosingCta } from '@/components/ClosingCta';
-import { PageHead } from '@/components/PageHead';
-import { ToolCard } from '@/components/ToolCard';
+import { FeaturedCard, Rows } from '@/components/Rows';
 import { getExperience, getHome, getProfile, getTools, getUi } from '@/lib/content';
 
 export const metadata: Metadata = {
@@ -12,36 +11,36 @@ export const metadata: Metadata = {
 
 export default async function WorkPage() {
   const [experience, tools, home, profile, ui] = await Promise.all([getExperience(), getTools(), getHome(), getProfile(), getUi()]);
+  const [current, ...earlier] = experience;
   const atWork = tools.filter((t) => t.origin === 'work');
 
   return (
     <>
-      <PageHead
-        label={home.work.label}
-        title="Work"
-        lead="At AVRL I built the company's own internal products, then used them to work with clients while building more of their solutions. Those products are confidential and protected by patents, so I can't show them. Here's where I've worked, and the tooling I could open-source."
-      />
-      <div className="container page-body">
-        <div className="flow">
-          <p className="label">Experience</p>
-          <ol className="stack-list" role="list">
-            {experience.map((e, i) => (
-              <li className={`card sticky-card${i > 0 ? ' morph' : ''}`} style={{ '--i': i } as React.CSSProperties} key={e.slug}>
-                <p className="label">{e.start} — {e.end}</p>
-                <h2 className="h3 sm">{e.role} <span className="muted at">at {e.company}</span></h2>
-                <p className="muted">{e.impact}</p>
-              </li>
-            ))}
-          </ol>
-          {atWork.length > 0 && (
-            <>
-              <p className="label flow-label">Tooling I built at work, and open-sourced</p>
-              <div className="stack-list">
-                {atWork.map((t, i) => <ToolCard key={t.slug} t={t} index={i} />)}
-              </div>
-            </>
-          )}
-        </div>
+      <div className="container page-head">
+        <p className="label">{home.work.label}</p>
+        <h1 className="display page-title">Work</h1>
+        <p className="lead page-lead">
+          At AVRL I built the company&apos;s own internal products, then used them to work with clients while building more of their solutions.
+          Those products are confidential and protected by patents, so I can&apos;t show them. Here&apos;s where I&apos;ve worked, and the tooling I could open-source.
+        </p>
+        {current && (
+          <FeaturedCard
+            coverLabel={`${current.start} — ${current.end}`}
+            coverTitle={current.role}
+            chip="Now"
+            meta={current.company}
+            title={current.role}
+            text={current.impact}
+          />
+        )}
+        <Rows
+          label="Earlier"
+          items={earlier.map((e) => ({ key: e.slug, kind: `${e.start} — ${e.end}`, title: e.role, text: e.impact, chip: 'AVRL' }))}
+        />
+        <Rows
+          label="Tooling I built at work, and open-sourced"
+          items={atWork.map((t) => ({ key: t.slug, href: `/open-source/${t.slug}`, kind: t.kind, title: t.title, text: t.tagline, chip: t.stack[0] }))}
+        />
       </div>
       <ClosingCta headline={home.closingHeadline} lead={home.closingLead} bookUrl={profile.booking?.url ?? '#'} bookLabel={ui.bookCta} bookTitle={profile.booking?.title ?? undefined} />
     </>

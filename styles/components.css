@@ -304,7 +304,6 @@ body:has(dialog[open]) { overflow: hidden; }
 .preview-row .corner { position: absolute; top: 22px; right: 22px; }
 .page-body { padding-bottom: clamp(48px, 8vw, 96px); }
 .page-body .flow { max-width: 880px; }
-.stack-list { display: grid; gap: 20px; align-content: start; margin: 0; padding: 0; list-style: none; }
 .tool-card, .project-card { display: grid; gap: 12px; padding: 22px; }
 .about-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; margin-top: 12px; }
 .modes { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
@@ -337,21 +336,26 @@ body:has(dialog[open]) { overflow: hidden; }
 .tip-wrap:hover .tooltip, .tip-wrap:focus-within .tooltip { opacity: 1; transform: none; }
 .tip-wrap:last-child .tooltip { left: auto; right: 0; }
 
-/* Cards stack per section: each group is its own container, so a group's sticky cards release when the group ends. */
-@media (min-height: 720px) {
-  .stack-list > .sticky-card { position: sticky; top: calc(var(--header-h) + 24px + min(var(--i, 0) * 16px, 64px)); }
-}
-
 /* ---------- glass: blur + translucency on everything that floats ---------- */
-.site-header { background: color-mix(in oklab, var(--bg) 50%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); }
 .dialog:not(.dialog-menu) { background: color-mix(in oklab, var(--surface) 80%, transparent); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); }
 .dialog-menu { background: color-mix(in oklab, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(28px) saturate(1.3); backdrop-filter: blur(28px) saturate(1.3); }
 .dialog::backdrop { background: rgb(0 0 0 / 0.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.hero-card { background: color-mix(in oklab, var(--surface) 72%, transparent); -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3); }
 .tooltip { background: color-mix(in oklab, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
 .rumi-ball-btn, .rumi-bubble { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .rumi-ball-btn { background: color-mix(in oklab, var(--surface) 70%, transparent); }
-.popmenu-panel { background: color-mix(in oklab, var(--surface) 80%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.popmenu-panel { background: color-mix(in oklab, var(--surface) 68%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+
+/* Containers that hold floating children (the résumé dropdown, the tooltips) must not be backdrop roots themselves,
+   or the child's blur can only see the container. So their glass lives on a pseudo-element underneath the content. */
+.site-header, .hero-card { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; isolation: isolate; }
+.site-header::before, .hero-card::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+}
+.site-header::before { background: color-mix(in oklab, var(--bg) 50%, transparent); }
+.hero-card { position: relative; border: 1px solid var(--line); }
+.hero-card::before { background: color-mix(in oklab, var(--surface) 72%, transparent); }
 @supports not (backdrop-filter: blur(1px)) {
-  .site-header, .dialog, .hero-card, .tooltip { background: var(--surface); }
+  .site-header::before { background: var(--bg); }
+  .hero-card::before, .dialog, .tooltip, .popmenu-panel { background: var(--surface); }
 }
