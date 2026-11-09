@@ -1,10 +1,10 @@
 principles:
   - title: Own the whole slice
-    text: Requirements, schema, API, UI and deploy pipeline. I follow a feature until it works for the person using it.
-  - title: Agree it before you build it
-    text: I approve or reject every requirement in writing before engineering starts, so the build matches what the customer actually needs.
+    text: I take a feature from the first conversation to the deploy, and I stay with it until it works for the person using it.
+  - title: Agree it before I build it
+    text: Before engineering starts, every requirement is written down and the customer has said yes to it. Then what I build is what they actually need.
   - title: Ship small, ship often
-    text: Small pull requests, tests at every level and context handed off in files, so the next person never starts cold.
+    text: Small pull requests, tests at every level, and context left in files, so whoever picks it up next never starts cold.
 stackGroups:
   - name: Languages
     tools: [TypeScript, JavaScript, Python, SQL, Go]
@@ -16,10 +16,3 @@ stackGroups:
     tools: [PostgreSQL, Redis, GCP Cloud Run, Docker, GitHub Actions, Linux]
   - name: Testing & AI
     tools: [Jest, Vitest, E2E suites, OpenAI API, Claude Code, Cursor]
-openSource:
-  - name: schemafied
-    description: Python schema validator, published on PyPI
-    url: https://github.com/devnadeemashraf
-  - name: depman
-    description: Go dependency checker
-    url: https://github.com/devnadeemashraf

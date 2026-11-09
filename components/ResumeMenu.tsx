@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Download } from './Icons';
 
-export function ResumeMenu({ label, sde, fde }: { label: string; sde: string; fde: string }) {
+export function ResumeMenu({ label, sde, fde, align = 'right' }: { label: string; sde: string; fde: string; align?: 'left' | 'right' }) {
   const ref = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function ResumeMenu({ label, sde, fde }: { label: string; sde: string; fd
   }, []);
 
   return (
-    <details className="popmenu" ref={ref}>
+    <details className="popmenu" data-align={align} ref={ref}>
       <summary className="btn btn-ghost">
         <Download /> {label}
       </summary>

@@ -23,7 +23,7 @@ export function FooterRumi() {
   useEffect(() => setVoice(localStorage.getItem('rumi-voice') === 'on'), []);
 
   function onClick() {
-    meow(0.18);
+    meow(n.current % 2 ? 'demand' : 'greet');
     track('easter_egg', { name: 'footer_rumi' });
     setLine(LINES[n.current++ % LINES.length]!);
     setTimeout(() => setLine(null), 3200);
@@ -40,7 +40,7 @@ export function FooterRumi() {
     setVoice(next);
     localStorage.setItem('rumi-voice', next ? 'on' : 'off');
     dispatchEvent(new CustomEvent('rumi:voice', { detail: next }));
-    if (next) meow(0.14);
+    if (next) meow('greet');
   }
 
   return (

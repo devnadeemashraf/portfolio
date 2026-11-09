@@ -198,30 +198,70 @@ body:has(dialog[open]) { overflow: hidden; }
 }
 
 /* ---------- hero ---------- */
-.hero { padding-block: clamp(56px, 9vw, 112px) clamp(24px, 4vw, 48px); }
+.hero { padding-block: clamp(48px, 7vw, 96px) clamp(32px, 5vw, 64px); }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
-@media (min-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1fr) 320px; align-items: end; gap: 64px; } }
-.hero-eyebrow { margin-bottom: 24px; }
-.hero .display { max-width: 15ch; font-size: clamp(40px, 6.6vw, 84px); }
-/* dim tail stays at --muted (7.8:1): hierarchy without failing contrast */
+@media (min-width: 960px) { .hero-grid { grid-template-columns: minmax(0, 1fr) 400px; align-items: center; gap: 56px; } }
+.hero-eyebrow { margin-bottom: 24px; line-height: 1.6; }
+.hero .display { font-size: clamp(38px, 4.8vw, 66px); letter-spacing: -0.04em; }
+.hero-h { display: block; }
+.hero-h-rest { display: block; }
 .hero .dim { color: var(--muted); }
 .hero-lead { max-width: 56ch; margin-top: 28px; }
-.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 32px; }
+.scroll-hint { margin-top: 32px; font-size: 11.5px; }
+
+/* role flip: variants share one grid cell, so the slot never resizes */
+.flip { display: grid; perspective: 700px; }
+.flip-title { display: inline-grid; vertical-align: bottom; }
+.flip-item { grid-area: 1 / 1; opacity: 0; transform-origin: 50% 60%; backface-visibility: hidden; white-space: nowrap; }
+.flip-item[data-active] { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .flip[data-anim] .flip-item[data-active] { animation: flip-in 520ms var(--ease-out) 180ms both; }
+  .flip[data-anim] .flip-item[data-leaving] { animation: flip-out 220ms ease-in both; }
+}
+@keyframes flip-in { from { opacity: 0; transform: rotateX(-88deg) translateY(8px); } }
+@keyframes flip-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: rotateX(88deg) translateY(-8px); } }
+
 .hero-more { min-height: 44px; font-size: 15px; font-weight: 500; }
-.hero-aside { display: grid; gap: 20px; }
-.aside-card { display: grid; gap: 14px; padding: 18px; border-radius: var(--r-3); }
-.aside-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; font-weight: 500; font-size: 15px; text-align: left; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 32px; }
+
+.hero-card { display: grid; gap: 22px; padding: 24px; border-radius: var(--r-5); }
+.hero-card-actions { display: grid; gap: 10px; }
+.hero-card-actions .btn-primary { width: 100%; }
+.hero-card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hero-card-row .btn, .hero-card-row summary { width: 100%; padding-inline: 12px; }
+.hero-card-row .popmenu { display: block; }
+.popmenu[data-align='left'] .popmenu-panel { left: 0; right: auto; }
+.opento { display: grid; gap: 12px; padding-top: 18px; border-top: 1px solid var(--line); }
+.opento dl { display: grid; gap: 14px; margin: 0; }
+.opento dt { font-size: 13px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+.opento dd { margin: 0; }
+.aside-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; font-weight: 500; font-size: 15px; text-align: left; padding-top: 14px; border-top: 1px solid var(--line); }
 .aside-link .nudge { transition: transform var(--dur-base) var(--ease-out); }
 .aside-link:hover .nudge { transform: translateX(3px); }
-.reloc { display: grid; gap: 4px; font-size: 13.5px; color: var(--muted); line-height: 1.5; padding-top: 12px; border-top: 1px solid var(--line); }
 .social-row { display: flex; gap: 8px; }
-.scroll-hint { font-size: 11.5px; }
+
+/* the card slides in from the right and settles beside the headline */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-card { animation: card-in 800ms var(--ease-out) 200ms both; }
+}
+@keyframes card-in { from { opacity: 0; transform: translateX(96px); } }
+@media (max-width: 959.98px) {
+  @keyframes card-in { from { opacity: 0; transform: translateY(40px); } }
+}
 
 /* ---------- home lists ---------- */
 .flow { display: grid; gap: 20px; align-content: start; }
 .flow-label { margin-top: 20px; }
-.principles, .exp, .oss { display: grid; gap: 16px; }
+.principles, .exp, .oss { display: contents; }
 .principles .card, .exp .card { display: grid; gap: 8px; padding: 20px; }
+
+/* Cards stick and stack so a fast scroll can't skip past them. Only when the viewport is tall enough to show a whole card. */
+@media (min-height: 720px) {
+  .flow .sticky-card { position: sticky; top: calc(112px + min(var(--i, 0) * 16px, 64px)); }
+}
+@media (max-width: 759.98px) and (min-height: 760px) {
+  .flow .sticky-card { top: calc(var(--header-h) + 60px + min(var(--i, 0) * 10px, 40px)); }
+}
 .stack-group { display: grid; gap: 14px; padding: 20px; }
 
 /* ---------- contact ---------- */
@@ -255,3 +295,5 @@ body:has(dialog[open]) { overflow: hidden; }
   .dialog, .dialog::backdrop, .menu-links a { transition: none !important; }
   * { scroll-behavior: auto !important; }
 }
+
+.cover-art { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; }

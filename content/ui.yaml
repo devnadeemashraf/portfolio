@@ -5,14 +5,14 @@ navContact: Contact
 bookCta: Book a 15-min intro
 moreWaysToMeet: More ways to meet
 resumeLabel: Résumé
-recruiterTrigger: Recruiter? The 30-second version
+recruiterTrigger: Recruiter? Here's the 30-second version
 recruiterEyebrow: Open to roles
 scrollHint: Scroll to read the story
 readCaseStudy: Read the case study
 liveLabel: Live
 codeLabel: Code
 logsTitle: Build logs
-logsLead: Long-form stories of how I built things, narrated start to finish. The decisions, the dead ends and the trade-offs I'd make again.
+logsLead: "Long-form stories of how I built things, told start to finish: the decisions, the dead ends, and the trade-offs I'd make again."
 workTitle: Work
 footerTagline: Built with Next.js · Hosted on Vercel
 copyLabel: Copy

@@ -1,0 +1,65 @@
+---
+title: How I use AI in my production workflow
+date: 2026-11-09
+summary: The tools I use, the habits that keep me in charge of what ships, and the things I'm still learning to bring in.
+tags:
+  - AI
+  - Workflow
+---
+
+## The rule I start with
+
+AI writes code quickly, and I own what ships. Those two sentences sit at the centre of how I work. If I can't explain a change in a review, it doesn't go in, however fast it was written.
+
+I've put AI tools into my everyday production work, and the thing that made them useful was never the tool. It was the process I wrapped around it.
+
+## Specs before code
+
+I don't start by asking a model to build something. I start with a spec. In my workflow it's a short blueprint document: the problem, the behaviour I want, the edge cases, and what's out of scope.
+
+Then I review the spec before any code is generated. That one habit catches more mistakes than anything else I do, because a wrong assumption is cheap to fix in a paragraph and expensive to fix in a pull request.
+
+<Decision
+  chose="Review the spec before generation, instead of reviewing only the code afterwards."
+  because="The model builds exactly what the spec says, so a vague or wrong spec produces confident, wrong code."
+  tradeoff="It adds a few minutes of writing before anything runs, and it can feel slower on the first day of a feature."
+/>
+
+## Handoff files, so context is never lost
+
+A model forgets everything between sessions, and so do I. So I keep a handoff file next to the work. It says what's done, what's next, which decisions are settled, and where to resume.
+
+This very site is built that way. The repo carries a plan, a roadmap and a handoff file, and a fresh session can pick up from them without me explaining the project again. The same idea carries context across pull requests at work.
+
+## Tests are the leash
+
+Generated code gets the same tests as code I wrote by hand: unit tests for the logic, integration tests for the seams, and end-to-end tests for the journeys that matter. I'd rather trust a green suite than my own reading of a diff at the end of a long day.
+
+## The tools, and what each is for
+
+I use more than one, because they're good at different things:
+
+- **Claude Code** for work that spans many files and needs a plan, and for running a spec-driven loop.
+- **Cursor** for quick edits and exploring a codebase inside the editor.
+- **Antigravity** for trying agent-style workflows.
+- **The OpenAI and Gemini APIs** when I'm building something with a model inside it.
+- **Graphify**: [placeholder: one line on what you use it for].
+
+## Monitored vibe-coding
+
+Sometimes I just want a thing to exist. I built slayply, my job-application helper, in about an hour like that: I described what I wanted, watched what came back, and steered. I call it *monitored* vibe-coding, because I never walk away from it. It's perfect for a personal tool, and it's not how I'd ship something other people depend on.
+
+## What I'm still learning
+
+There are things I haven't used properly yet, and I want to, because I can already see how they'd make my days easier:
+
+- **MCP servers**, so my tools can reach the systems I work with, instead of me pasting context in by hand.
+- **Hooks**, so that checks like formatting and tests run automatically every time, instead of when I remember.
+- **Subagents and skills**, to split a big task into focused helpers and reuse my best prompts.
+- **Evals**, so that when I change a prompt I can tell whether it got better, instead of guessing.
+
+I'll write about each one here as I use it.
+
+## What I'd change
+
+Not much about the foundation. Specs first, handoff files, and real tests have all held up, and I'd start any project the same way. The change I'm making is the list above: bringing in the tools I haven't tried yet, one at a time, and writing down how each one went.

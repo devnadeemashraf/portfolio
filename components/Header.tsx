@@ -3,7 +3,6 @@ import { Menu } from './Icons';
 import { SheetTrigger } from './Sheets';
 import { ThemeToggle } from './ThemeToggle';
 import { ResumeMenu } from './ResumeMenu';
-import { AvailabilityPill } from './AvailabilityPill';
 
 type Props = {
   name: string;
@@ -32,7 +31,6 @@ export function Header({ name, monogram, available, availableLabel, resumeSde, r
         </nav>
 
         <div className="header-actions">
-          {available && <span className="hide-sm"><AvailabilityPill label={availableLabel} /></span>}
           <ThemeToggle />
           <span className="hide-sm"><ResumeMenu label={ui.resumeLabel} sde={resumeSde} fde={resumeFde} /></span>
           <SheetTrigger name="menu" className="btn-icon show-sm" aria-label="Open menu">

@@ -9,7 +9,7 @@ export default async function Image() {
   const p = await getProfile();
   return ogCard({
     eyebrow: 'nadeemashraf.cyou',
-    bright: p.heroHeadline.replace(/,$/, ''),
+    bright: `Software and forward deployed ${p.heroHeadline.replace(/,$/, '')}`,
     dim: p.heroHeadlineDim,
     name: p.name,
     monogram: p.monogram,

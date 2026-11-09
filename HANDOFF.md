@@ -6,12 +6,20 @@ Read this first in a fresh chat, then `ROADMAP.md`, then `design/guide/motion-in
 
 First draft complete and committed on `main`. `pnpm build` passes. Routes: `/`, `/work/[slug]`, `/logs`, `/logs/[slug]`, `/logs/rss.xml`, `/resume` (redirect), `/keystatic`, 404, sitemap, robots, OG images.
 
+## Round 2 (2026-11-09, after feedback)
+
+
+**Please confirm / fill:**
+- Open-source repo URLs are guesses (`github.com/devnadeemashraf/<name>`); schemafied PyPI name/install command assumed. Usage examples and "why I built it" are placeholders. The shadcn/ui theme editor description is generic.
+- AI-workflow log: tool descriptions (what each of Claude Code / Cursor / Antigravity is "for"), the Graphify line, and the "still learning" list (MCP, hooks, subagents/skills, evals) are my framing. Edit to match reality.
+- Hero title flips between Forward deployed / Full-stack / Software; the static SEO role is "Senior Software & Forward Deployed Engineer".
+- Rumi's colours are the one deliberate departure from the grayscale rule.
+
 ## Decisions made (do not re-litigate)
 
 - Role shown as **Senior Forward Deployed Engineer** (user's call; résumés say Client Solutions Engineer / Forward Deployed Engineer, and the experience entries keep those real titles).
-- Only **AVRL projects are excluded**; H&H is the only project. User will write more later; `docs/CASE-STUDY-STYLE.md` is the template.
 - Only the two **master résumés** are public (`.gitignore` whitelists them).
-- Six Cal.com links, picker sheet; primary CTA is the 15-minute intro. Technical discussion is 30 min (descriptions file, newer than notes.md).
+- Five Cal.com links (no Engineering consultation); Technical discussion is 45 min. Primary CTA is the 15-minute intro.
 - No-screenshot covers: `Blueprint` component from `coverNodes` / `coverStats`.
 - Analytics: Vercel Analytics + Speed Insights + PostHog free (cookieless). Extra deps approved: `@keystatic/core`, `@keystatic/next`, `next-mdx-remote`, `posthog-js`, `@vercel/analytics`, `@vercel/speed-insights`.
 - Keystatic storage is `local` unless `NEXT_PUBLIC_KEYSTATIC_STORAGE=github`.
@@ -23,8 +31,7 @@ First draft complete and committed on `main`. `pnpm build` passes. Routes: `/`, 
 
 - `content/profile.yaml`: **Engineering consultation Cal.com URL is a guess** (`/engineering-consultation`); confirm.
 - `content/home.yaml`: contact lead has `[48 hours]` reply-time placeholder.
-- `content/projects/h-h.mdx`: `timeline`, `liveUrl`/`codeUrl`, retro paragraph (all `[placeholder]`). Check the facts against reality.
-- `content/logs/building-nadeemashraf-cyou.mdx`: "What I'd change" chapter.
+- `content/projects/h-h.mdx`: `liveUrl`/`codeUrl`. Check the facts against reality.
 - LeetCode URL format (`/u/NadeemAshraf`) and the open-source repo URLs (currently the GitHub profile) need checking.
 - Open Graph images use the default `next/og` font (not Geist).
 

@@ -41,6 +41,21 @@ export async function getProject(slug: string) {
   return { slug, ...e, source };
 }
 
+export const getTools = cache(async () => {
+  const all = await reader.collections.tools.all();
+  return all
+    .map((e) => ({ slug: e.slug, ...e.entry }))
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+});
+
+export type Tool = Awaited<ReturnType<typeof getTools>>[number];
+
+export async function getTool(slug: string) {
+  const e = await reader.collections.tools.read(slug);
+  if (!e) return null;
+  return { slug, ...e, source: await bodyOf(e.body) };
+}
+
 export function readingMinutes(source: string) {
   const words = source.replace(/<[^>]+>|[#*_`>\-]/g, ' ').split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 220));

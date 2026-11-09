@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowUpRight } from './Icons';
 import { Blueprint } from './Blueprint';
+import { StorefrontArt } from './CoverArt';
 import type { Project } from '@/lib/content';
 
 export function ProjectCover({ p, priority = false }: { p: Project; priority?: boolean }) {
@@ -9,6 +10,8 @@ export function ProjectCover({ p, priority = false }: { p: Project; priority?: b
     <div className="cover" style={{ viewTransitionName: `project-${p.slug}` }}>
       {p.cover ? (
         <Image src={p.cover} alt="" width={1280} height={800} priority={priority} sizes="(min-width: 760px) 50vw, 100vw" />
+      ) : p.coverArt === 'storefront' ? (
+        <StorefrontArt title={p.title} />
       ) : (
         <Blueprint title={p.title} nodes={p.coverNodes} stats={p.coverStats} />
       )}
@@ -30,7 +33,7 @@ export function ProjectCard({
   codeLabel: string;
 }) {
   return (
-    <article className="card project-card morph">
+    <article className="card project-card morph sticky-card" style={{ '--i': index } as React.CSSProperties}>
       <ProjectCover p={p} priority={index === 0} />
       <p className="label meta">
         {[p.status || null, p.role, p.year].filter(Boolean).join(' · ')}

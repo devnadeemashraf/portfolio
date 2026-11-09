@@ -25,11 +25,12 @@ With `pnpm dev` running, open <http://localhost:3000/keystatic>. In development 
 | Socials, Principles and stack, Interface strings | `content/socials.yaml`, `about.yaml`, `ui.yaml` | every visible string comes from content |
 | Projects | `content/projects/*.mdx` | case studies |
 | Build logs | `content/logs/*.mdx` | posts; reading time is computed |
+| Open source | `content/tools/*.mdx` | short pages at `/open-source/<slug>` |
 | Experience | `content/experience/*.yaml` | |
 
 Turning **Open to roles** off in Profile hides the availability pill, recruiter card, pulse and relocation chip everywhere.
 
-In MDX bodies, use the editor's block menu for **Decision** (Chose / Because / Trade-off), **Code** (copy button), **Figure**, **Metrics** and **Flow diagram**. Projects without a screenshot automatically get a "blueprint" cover drawn from their `coverNodes` and `coverStats`. To have an AI draft a new case study in the same voice, see `docs/CASE-STUDY-STYLE.md`.
+In MDX bodies, use the editor's block menu for **Decision** (Chose / Because / Trade-off), **Code** (copy button), **Figure**, **Metrics** and **Flow diagram**. Projects without a screenshot automatically get a "blueprint" cover drawn from their `coverNodes` and `coverStats`. To have an AI draft a case study, build log or tool page in the same voice, point it at `docs/WRITING-GUIDE.md` (also referenced from `CLAUDE.md` and `AGENTS.md`, so Claude Code and similar tools read it automatically).
 
 ## Keystatic GitHub mode (edit the live site from `/keystatic`)
 
@@ -73,7 +74,15 @@ PostHog runs cookieless (memory persistence), skips Do-Not-Track visitors, and i
 
 ## Rumi
 
-A Siamese cat lives on the site: footer perch, random walks with paw trails, clingy but uncatchable, 404 mascot, `rumi` / Konami for a paw rain, and a "Rumi misses you" tab title. His meow is synthesized with WebAudio at runtime (no audio files, no licences) and only plays after a click; ambient meows need the footer toggle. Everything is skipped under `prefers-reduced-motion`.
+A Siamese cat lives on the site, and everything he does is his idea:
+
+- He walks in at random (or when you press him in the footer), leaves paw trails, and keeps coming back to your cursor, but dodges if you get close.
+- Hold the cursor still and he comes to nap beside it. Move and he wakes and follows.
+- Touch him while he sleeps and he decides: a purr and a pet, or a grumpy dash away.
+- "Toss a cotton ball" (bottom-right button, or click then click anywhere) and he decides whether it is worth his time. If it is, he wiggles, pounces and bats it around.
+- Typing `rumi` or the Konami code makes it rain paws; a hidden tab reads "Rumi misses you"; the 404 page has him sitting on it.
+- His meows have personalities (greeting, demanding, annoyed, playful, sleepy, curious, smug, purring) and are synthesized with WebAudio at runtime: no audio files, no licences. Direct interactions play sound after a click; ambient meows need the footer "Rumi's voice" toggle.
+- All of it is skipped under `prefers-reduced-motion`; the footer keeps a static Rumi.
 
 ## Project map
 

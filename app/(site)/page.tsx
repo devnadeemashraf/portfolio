@@ -5,14 +5,16 @@ import { AvailabilityPill } from '@/components/AvailabilityPill';
 import { Story } from '@/components/Story';
 import { ProjectCard } from '@/components/ProjectCard';
 import { LogCard } from '@/components/LogCard';
+import { HeroHeading } from '@/components/HeroHeading';
+import { HeroCard } from '@/components/HeroCard';
 import {
-  getAbout, getExperience, getHome, getLogs, getProfile, getProjects, getSocials, getUi,
+  getAbout, getExperience, getHome, getLogs, getProfile, getProjects, getSocials, getTools, getUi,
 } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonld';
 
 export default async function Home() {
-  const [p, home, ui, projects, logs, about, experience, socials] = await Promise.all([
-    getProfile(), getHome(), getUi(), getProjects(), getLogs(), getAbout(), getExperience(), getSocials(),
+  const [p, home, ui, projects, logs, about, experience, socials, tools] = await Promise.all([
+    getProfile(), getHome(), getUi(), getProjects(), getLogs(), getAbout(), getExperience(), getSocials(), getTools(),
   ]);
   const featured = projects.filter((x) => x.featured);
   const bookUrl = p.booking?.url ?? '#';
@@ -24,54 +26,34 @@ export default async function Home() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <p className="label hero-eyebrow">{p.name} · {p.role} · {p.city}</p>
-            <h1 className="display" id="hero-title">
-              {p.heroHeadline} <span className="dim">{p.heroHeadlineDim}</span>
-            </h1>
+            <HeroHeading
+              name={p.name}
+              city={p.city}
+              roles={p.roles.map((r) => ({ word: r.word, title: r.title }))}
+              headline={p.heroHeadline}
+              dim={p.heroHeadlineDim}
+            />
             <p className="lead hero-lead">{p.lead}</p>
-            <div className="hero-actions">
-              <a className="btn btn-primary" href={bookUrl} target="_blank" rel="noopener noreferrer" data-track="book_click" data-label={p.booking?.title ?? undefined}>
-                <Calendar /> {ui.bookCta} <ArrowRight className="nudge" />
-              </a>
-              <a className="btn btn-ghost" href={p.resumeFde} download data-track="resume_download" data-label="fde">
-                <Download /> {ui.resumeLabel}
-              </a>
-              <SheetTrigger name="booking" className="link hero-more">{ui.moreWaysToMeet}</SheetTrigger>
-            </div>
+            <p className="label scroll-hint">{ui.scrollHint} ↓</p>
           </div>
 
-          <aside className="hero-aside" aria-label="Quick facts">
-            {p.available && (
-              <>
-                <div className="card aside-card">
-                  <AvailabilityPill label={p.availableLabel} />
-                  <SheetTrigger name="recruiter" className="aside-link">
-                    <span>{ui.recruiterTrigger}</span>
-                    <ArrowRight size={16} className="nudge" />
-                  </SheetTrigger>
-                  {p.relocation.length > 0 && (
-                    <p className="reloc">
-                      <span className="label">Open to relocate</span>
-                      <span>{p.relocation.join(' · ')}</span>
-                    </p>
-                  )}
-                </div>
-              </>
-            )}
-            <ul className="social-row" aria-label="Elsewhere">
-              {socials.map((s) => {
-                const Icon = socialIcon(s.label);
-                return (
-                  <li key={s.label}>
-                    <a className="btn-icon" href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (${s.handle})`}>
-                      <Icon />
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="label scroll-hint">{ui.scrollHint} ↓</p>
-          </aside>
+          <HeroCard
+            available={p.available}
+            availableLabel={p.availableLabel}
+            bookUrl={bookUrl}
+            bookTitle={p.booking?.title ?? undefined}
+            bookCta={ui.bookCta}
+            moreWays={ui.moreWaysToMeet}
+            resumeLabel={ui.resumeLabel}
+            resumeSde={p.resumeSde}
+            resumeFde={p.resumeFde}
+            recruiterTrigger={ui.recruiterTrigger}
+            workModes={p.workModes}
+            abroadLabel={p.abroadLabel}
+            abroad={p.relocation}
+            indiaCities={p.indiaCities}
+            socials={socials}
+          />
         </div>
       </section>
 
@@ -82,13 +64,13 @@ export default async function Home() {
       </Story>
 
       <Story id="logs" label={home.logs.label} statement={home.logs.statement} cta={home.logs.cta} ctaHref="/logs">
-        {logs.slice(0, 3).map((l) => <LogCard key={l.slug} l={l} />)}
+        {logs.slice(0, 3).map((l, n) => <LogCard key={l.slug} l={l} index={n} />)}
       </Story>
 
       <Story id="path" label={home.path.label} statement={home.path.statement} cta={home.path.cta} ctaHref={p.resumeFde} ctaDownload>
-        <ol className="principles">
+        <ol className="principles" role="list">
           {about.principles.map((pr, i) => (
-            <li className="card morph" key={pr.title}>
+            <li className="card morph sticky-card" style={{ '--i': i } as React.CSSProperties} key={pr.title}>
               <p className="label">{String(i + 1).padStart(2, '0')}</p>
               <h3 className="h3 sm">{pr.title}</h3>
               <p className="muted">{pr.text}</p>
@@ -96,26 +78,27 @@ export default async function Home() {
           ))}
         </ol>
         <p className="label flow-label">Experience</p>
-        <ol className="exp">
-          {experience.map((e) => (
-            <li className="card morph" key={e.slug}>
+        <ol className="exp" role="list">
+          {experience.map((e, i) => (
+            <li className="card morph sticky-card" style={{ '--i': i } as React.CSSProperties} key={e.slug}>
               <p className="label">{e.start} — {e.end}</p>
               <h3 className="h3 sm">{e.role} <span className="muted at">at {e.company}</span></h3>
               <p className="muted">{e.impact}</p>
             </li>
           ))}
         </ol>
-        {about.openSource.length > 0 && (
+        {tools.length > 0 && (
           <>
             <p className="label flow-label">Open source</p>
-            <ul className="oss">
-              {about.openSource.map((o) => (
-                <li key={o.name} className="card morph">
-                  <a href={o.url} className="card-link" target="_blank" rel="noopener noreferrer">
-                    <h3 className="h3 sm mono">{o.name}</h3>
-                    <p className="muted">{o.description}</p>
+            <ul className="oss" role="list">
+              {tools.map((t, n) => (
+                <li key={t.slug} className="card morph sticky-card" style={{ '--i': n } as React.CSSProperties}>
+                  <Link href={`/open-source/${t.slug}`} className="card-link">
+                    <p className="label">{t.kind}</p>
+                    <h3 className="h3 sm mono">{t.title}</h3>
+                    <p className="muted">{t.tagline}</p>
                     <ArrowUpRight className="corner" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -124,8 +107,8 @@ export default async function Home() {
       </Story>
 
       <Story id="stack" label={home.stack.label} statement={home.stack.statement} cta={home.stack.cta} ctaHref={p.resumeSde} ctaDownload>
-        {about.stackGroups.map((g) => (
-          <div className="card morph stack-group" key={g.name}>
+        {about.stackGroups.map((g, i) => (
+          <div className="card morph stack-group sticky-card" style={{ '--i': i } as React.CSSProperties} key={g.name}>
             <h3 className="h3 sm">{g.name}</h3>
             <ul className="chips">
               {g.tools.map((t) => <li className="chip" key={t}>{t}</li>)}

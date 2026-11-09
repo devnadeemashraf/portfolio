@@ -15,6 +15,15 @@
 - [x] Rumi easter eggs
 - [x] README
 
+## Done (round 2, from feedback)
+
+- [x] Hero: role flip (Forward deployed / Full-stack / Software) with matching eyebrow title; availability pill removed from the nav
+- [x] Hero card: slides in from the right; book, résumé (two PDFs), more ways to meet, Open to (remote, abroad with visa note, Indian cities), recruiter link, socials
+- [x] Sticky stacking cards so fast scrolls cannot skip content
+- [x] Voice pass: all copy in Nadeem's spoken first-person voice; "What I'd change" written everywhere
+- [x] Rumi: natural Siamese colours, nap near a still cursor, pet-or-flee, cotton-ball play, per-action meow personalities
+- [x] `docs/WRITING-GUIDE.md` for AI content writing (+ `CLAUDE.md`, `AGENTS.md` pointers)
+
 ## Next
 
 1. User: fill placeholders listed in `HANDOFF.md`; add real project case studies (use `docs/CASE-STUDY-STYLE.md`).

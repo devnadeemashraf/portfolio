@@ -75,7 +75,14 @@ export default config({
       schema: {
         name: fields.text({ label: 'Name' }),
         monogram: fields.text({ label: 'Monogram (2 letters)' }),
-        role: fields.text({ label: 'Role' }),
+        role: fields.text({ label: 'Role (static: SEO, OG, JSON-LD)' }),
+        roles: fields.array(
+          fields.object({
+            word: fields.text({ label: 'Headline word (e.g. Full-stack)' }),
+            title: fields.text({ label: 'Title line (e.g. Senior Full-Stack Engineer)' }),
+          }),
+          { label: 'Rotating roles (hero flip)', itemLabel: (p) => p.fields.word.value },
+        ),
         city: fields.text({ label: 'City' }),
         heroHeadline: fields.text({ label: 'Hero headline (bright part)', multiline: true }),
         heroHeadlineDim: fields.text({ label: 'Hero headline (dim tail)', multiline: true }),
@@ -86,10 +93,13 @@ export default config({
           defaultValue: true,
         }),
         availableLabel: fields.text({ label: 'Availability label' }),
+        workModes: fields.array(fields.text({ label: 'Mode' }), { label: 'Open to: work modes', itemLabel: (p) => p.value }),
+        abroadLabel: fields.text({ label: 'Abroad label (e.g. Abroad · visa sponsorship needed)' }),
         relocation: fields.array(fields.text({ label: 'Country' }), {
-          label: 'Open to relocate to',
+          label: 'Open to relocate to (abroad)',
           itemLabel: (p) => p.value,
         }),
+        indiaCities: fields.array(fields.text({ label: 'City' }), { label: 'Open to: Indian cities', itemLabel: (p) => p.value }),
         startDate: fields.text({ label: 'Start date' }),
         email: fields.text({ label: 'Public email' }),
         siteUrl: fields.text({ label: 'Site URL', defaultValue: 'https://nadeemashraf.cyou' }),
@@ -193,14 +203,6 @@ export default config({
           }),
           { label: 'Stack groups', itemLabel: (p) => p.fields.name.value },
         ),
-        openSource: fields.array(
-          fields.object({
-            name: fields.text({ label: 'Name' }),
-            description: fields.text({ label: 'Description' }),
-            url: fields.text({ label: 'URL' }),
-          }),
-          { label: 'Open source', itemLabel: (p) => p.fields.name.value },
-        ),
       },
     }),
 
@@ -249,6 +251,14 @@ export default config({
         liveUrl: fields.text({ label: 'Live URL (optional)' }),
         codeUrl: fields.text({ label: 'Code URL (optional)' }),
         cover: fields.image({ label: 'Cover (optional)', directory: 'public/screens', publicPath: '/screens/' }),
+        coverArt: fields.select({
+          label: 'Cover art (used when there is no screenshot)',
+          options: [
+            { label: 'Blueprint (architecture flow)', value: 'blueprint' },
+            { label: 'Storefront wireframe', value: 'storefront' },
+          ],
+          defaultValue: 'blueprint',
+        }),
         coverNodes: fields.array(fields.text({ label: 'Node' }), {
           label: 'Blueprint cover nodes (used when there is no screenshot)',
           itemLabel: (p) => p.value,
@@ -260,6 +270,25 @@ export default config({
         featured: fields.checkbox({ label: 'Featured on Home', defaultValue: true }),
         order: fields.integer({ label: 'Order', defaultValue: 1 }),
         body: fields.mdx({ label: 'Case study', components }),
+      },
+    }),
+
+    tools: collection({
+      label: 'Open source',
+      slugField: 'title',
+      path: 'content/tools/*',
+      format: { contentField: 'body' },
+      schema: {
+        title: fields.slug({ name: { label: 'Name' } }),
+        tagline: fields.text({ label: 'Tagline', multiline: true }),
+        kind: fields.text({ label: 'Kind (e.g. Python package)' }),
+        status: fields.text({ label: 'Status' }),
+        stack: fields.array(fields.text({ label: 'Tool' }), { label: 'Stack', itemLabel: (p) => p.value }),
+        repoUrl: fields.text({ label: 'Repo URL' }),
+        siteUrl: fields.text({ label: 'Package / site URL (optional)' }),
+        install: fields.text({ label: 'Install / run command (optional)' }),
+        order: fields.integer({ label: 'Order', defaultValue: 1 }),
+        body: fields.mdx({ label: 'Page', components }),
       },
     }),
 

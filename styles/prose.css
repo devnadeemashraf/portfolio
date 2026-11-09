@@ -159,3 +159,10 @@
 /* 404 */
 .notfound { min-height: 60vh; display: grid; place-content: center; justify-items: center; gap: 20px; text-align: center; padding: 64px 20px; }
 .notfound .display { font-size: clamp(80px, 16vw, 180px); }
+
+/* open-source tool pages */
+.tool-title { font-family: var(--font-mono), monospace; letter-spacing: -0.04em; }
+.install { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; padding: 6px 6px 6px 18px; border: 1px solid var(--line); border-radius: var(--r-full); background: var(--surface); width: fit-content; max-width: 100%; }
+.install code { font-size: 14px; overflow-x: auto; white-space: nowrap; }
+.doc-single { grid-template-columns: minmax(0, 720px); justify-content: center; }
+@media (min-width: 1000px) { .doc-single { grid-template-columns: minmax(0, 720px); } }

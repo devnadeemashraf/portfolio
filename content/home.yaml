@@ -1,14 +1,14 @@
 work:
   label: 01 — Work
-  statement: "I take a customer's problem from the first call to production: the spec, the schema, the API, the interface and the deploy. Here is how that looks in practice."
+  statement: "I take a customer's problem all the way to production: the call, the spec, the schema, the API, the interface and the deploy. Here's what that looks like when it's mine to build."
   cta: All projects
 logs:
   label: 02 — Build logs
-  statement: Every project leaves a trail of decisions. I write them down, so you can see how I think, not just what I shipped.
+  statement: Every project leaves a trail of decisions, so I write them down. You get to see how I think, not just what I shipped.
   cta: All build logs
 path:
   label: 03 — Path
-  statement: Five years in, I've learned that the best code is code your teammates can change without fear, and that the best spec is one the customer has already agreed to.
+  statement: Five years in, I've learned two things. The best code is code your teammates can change without fear, and the best spec is one the customer has already said yes to.
   cta: Download résumé
 stack:
   label: 04 — Stack
@@ -16,6 +16,6 @@ stack:
   cta: See the résumé
 contactLabel: 05 — Contact
 contactHeadline: Let's build something worth writing about.
-contactLead: Hiring a senior FDE, or have a product that needs an owner? I reply within [48 hours].
-closingHeadline: Need someone who can own a feature end to end?
-closingLead: I'm open to senior forward deployed and full-stack roles, in India or abroad. A 15-minute call is the quickest way to see if we fit.
+contactLead: "Hiring for a senior role, or have a product that needs an owner? Book a call or write to me, and I'll get back to you within [48 hours]."
+closingHeadline: Need someone who owns a feature from the first call to the last deploy?
+closingLead: I'm open to senior software, full-stack and forward deployed roles, in India or abroad. A 15-minute call is the quickest way to see if we fit.
