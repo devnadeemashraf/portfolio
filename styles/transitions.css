@@ -1,0 +1,22 @@
+/* Cross-document View Transitions (Chromium). Other browsers just navigate. */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 250ms; }
+
+::view-transition-group(*) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Theme switch: the new theme grows from the toggle; JS animates clip-path on the new snapshot. */
+.theme-vt::view-transition-old(root),
+.theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.theme-vt::view-transition-new(root) { z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

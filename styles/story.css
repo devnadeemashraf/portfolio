@@ -1,0 +1,84 @@
+/* Scroll story. Resting state = finished, readable. Animation only starts from the dim state. */
+
+.story { padding-block: clamp(64px, 10vw, 120px); }
+.split { display: grid; grid-template-columns: 1fr; gap: 28px var(--split-gap); }
+
+.chap { display: flex; align-items: center; gap: 16px; margin: 0 0 24px; font-size: 12.5px; }
+.chap .bar { display: block; flex: 0 1 220px; height: 1px; background: var(--line); overflow: hidden; }
+.chap .bar > span { display: block; width: 100%; height: 1px; background: var(--ink); transform-origin: left center; }
+
+.stmt {
+  font-weight: 500; font-size: clamp(30px, 3.3vw, 46px); line-height: 1.16; letter-spacing: -0.032em; margin: 0;
+}
+.stmt .w { color: var(--ink); }
+.stick-cta { margin-top: 28px; font-size: 15px; }
+
+/* desktop: 5:6 split, sticky left column */
+@media (min-width: 760px) {
+  .split { grid-template-columns: 5fr 6fr; }
+  .stick { position: sticky; top: 112px; align-self: start; }
+}
+
+/* phone: no pinning; the sticky column dissolves so the chapter bar can stick for the whole section */
+@media (max-width: 759.98px) {
+  .stick { display: contents; }
+  .stmt { font-size: clamp(28px, 8vw, 36px); }
+  .chap {
+    position: sticky; top: var(--header-h); z-index: 5; margin: 0 calc(var(--gutter) * -1); padding: 12px var(--gutter);
+    background: color-mix(in oklab, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .chap .bar { flex: 1; }
+  .story { padding-top: 0; }
+  .story .split { padding-top: 0; }
+}
+
+/* ---- scroll-driven (Chromium, Safari 26+). Skipped entirely under reduced motion. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .story { view-timeline-name: --sec; }
+    .story .w {
+      animation: fill linear both; animation-timeline: --sec;
+      animation-range: cover calc(var(--fill-start) + var(--p0) * var(--fill-span)) cover calc(var(--fill-start) + 5vh + var(--p1) * var(--fill-span));
+    }
+    .story .bar > span { animation: grow linear both; animation-timeline: --sec; animation-range: cover var(--fill-start) exit 0%; }
+    .story .morph { animation: morph linear both; animation-timeline: view(); animation-range: entry 0% cover 32%; }
+
+    @media (max-width: 759.98px) {
+      .story .stmt { view-timeline-name: --stmt; }
+      .story .w {
+        animation-timeline: --stmt;
+        animation-range: cover calc(12% + var(--p0) * 38%) cover calc(12% + var(--p1) * 38% + 3%);
+      }
+    }
+  }
+
+  /* Fallback driven by IntersectionObserver (only when .js-fill is set by ScrollFallback) */
+  .js-fill .stmt { --fp: 0; }
+  .js-fill .stmt .w {
+    --k: clamp(0, (var(--fp) - var(--p0)) / (var(--p1) - var(--p0) + 0.0001), 1);
+    color: color-mix(in oklab, var(--ink) calc(var(--k) * 100%), var(--unread));
+    transition: color var(--dur-base) linear;
+  }
+  .js-fill .morph { opacity: 0; transform: translateY(var(--rise-scroll)) scale(var(--scale-in)); filter: blur(var(--blur-in)); }
+  .js-fill .morph.in {
+    opacity: 1; transform: none; filter: none;
+    transition: opacity var(--dur-story) var(--ease-out), transform var(--dur-story) var(--ease-out), filter var(--dur-story) var(--ease-out);
+  }
+}
+
+@keyframes fill { from { color: var(--unread); } }
+@keyframes grow { from { transform: scaleX(0); } }
+@keyframes morph { from { opacity: 0; transform: translateY(var(--rise-scroll)) scale(0.96); filter: blur(10px); } }
+
+/* hero entrance on load (Home) */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > *, .hero-aside > * { animation: rise var(--dur-story) var(--ease-out) both; }
+  .hero-copy > :nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
+  .hero-copy > :nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+  .hero-copy > :nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+  .hero-aside > :nth-child(1) { animation-delay: calc(var(--stagger) * 2); }
+  .hero-aside > :nth-child(2) { animation-delay: calc(var(--stagger) * 3); }
+  .hero-aside > :nth-child(3) { animation-delay: calc(var(--stagger) * 4); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(var(--rise)); } }
