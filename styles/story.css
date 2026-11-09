@@ -26,7 +26,7 @@
   .chap {
     position: sticky; top: var(--header-h); z-index: 5; margin: 0 calc(var(--gutter) * -1); padding: 12px var(--gutter);
     background: color-mix(in oklab, var(--bg) 88%, transparent);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   }
   .chap .bar { flex: 1; }
   .story { padding-top: 0; }

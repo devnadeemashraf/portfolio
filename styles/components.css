@@ -62,7 +62,7 @@
 .site-header {
   position: sticky; top: 0; z-index: 20; height: var(--header-h);
   background: color-mix(in oklab, var(--bg) 88%, transparent);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
 .header-row { display: flex; align-items: center; justify-content: space-between; height: 100%; gap: 16px; }
@@ -343,15 +343,15 @@ body:has(dialog[open]) { overflow: hidden; }
 }
 
 /* ---------- glass: blur + translucency on everything that floats ---------- */
-.site-header { background: color-mix(in oklab, var(--bg) 62%, transparent); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); }
-.dialog:not(.dialog-menu) { background: color-mix(in oklab, var(--surface) 80%, transparent); backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3); }
-.dialog-menu { background: color-mix(in oklab, var(--bg) 78%, transparent); backdrop-filter: blur(28px) saturate(1.3); -webkit-backdrop-filter: blur(28px) saturate(1.3); }
-.dialog::backdrop { background: rgb(0 0 0 / 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.hero-card { background: color-mix(in oklab, var(--surface) 72%, transparent); backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3); }
-.tooltip { background: color-mix(in oklab, var(--surface) 78%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-.rumi-ball-btn, .rumi-bubble { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.site-header { background: color-mix(in oklab, var(--bg) 50%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); }
+.dialog:not(.dialog-menu) { background: color-mix(in oklab, var(--surface) 80%, transparent); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); }
+.dialog-menu { background: color-mix(in oklab, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(28px) saturate(1.3); backdrop-filter: blur(28px) saturate(1.3); }
+.dialog::backdrop { background: rgb(0 0 0 / 0.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hero-card { background: color-mix(in oklab, var(--surface) 72%, transparent); -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3); }
+.tooltip { background: color-mix(in oklab, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.rumi-ball-btn, .rumi-bubble { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .rumi-ball-btn { background: color-mix(in oklab, var(--surface) 70%, transparent); }
-.popmenu-panel { background: color-mix(in oklab, var(--surface) 80%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.popmenu-panel { background: color-mix(in oklab, var(--surface) 80%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
 @supports not (backdrop-filter: blur(1px)) {
   .site-header, .dialog, .hero-card, .tooltip { background: var(--surface); }
 }

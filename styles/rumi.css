@@ -76,7 +76,7 @@ body:has(.rumi-ball-btn[aria-pressed='true']) { cursor: crosshair; }
 .rumi-care summary { cursor: pointer; display: inline-block; min-height: 24px; list-style: none; }
 .rumi-care summary::-webkit-details-marker { display: none; }
 .rumi-care summary:hover { color: var(--ink); }
-.rumi-care[open] { text-align: left; max-width: 420px; margin-left: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-3); background: color-mix(in oklab, var(--surface) 75%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.rumi-care[open] { text-align: left; max-width: 420px; margin-left: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-3); background: color-mix(in oklab, var(--surface) 75%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .rumi-care ol { display: grid; gap: 8px; margin: 10px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--muted); }
 .rumi-care strong { color: var(--ink); font-weight: 500; }
 .rumi-care-intro { margin: 10px 0 0; font-size: 13px; line-height: 1.5; }
