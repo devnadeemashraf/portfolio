@@ -1,0 +1,128 @@
+---
+title: H&H
+oneLiner: A commerce platform for a fashion brand launching around late 2027, built so that orders, stock and payments run through a system instead of chat messages.
+role: Sole engineer
+year: '2026'
+timeline: In build · launching around late 2027
+team: Solo
+status: Pre-launch
+stack:
+  - TypeScript
+  - Next.js 16
+  - MedusaJS v2
+  - PostgreSQL
+  - Redis
+  - Docker
+liveUrl: ''
+codeUrl: ''
+coverArt: storefront
+coverNodes:
+  - Storefront
+  - Medusa v2
+  - Razorpay
+  - PostgreSQL
+  - Redis
+coverStats:
+  - value: '1'
+    label: order per payment
+  - value: '0'
+    label: oversells
+  - value: 2,100+
+    label: tests
+featured: true
+order: 1
+---
+
+## Where it started
+
+H&H is a fashion brand I'm launching around late 2027, selling hijabs, niqabs and pashminas. Selling through chat messages doesn't scale: every order starts as a conversation, and stock and price questions arrive faster than anyone can answer them. A proper store answers those questions itself.
+
+The storefront is called **Hayaloom**, a child of H&H. It's pre-launch, so nothing here is a vanity number from production traffic. Every figure below comes from tests and load runs I wrote on purpose to break the thing before a customer could.
+
+## The rules I set before writing code
+
+Three promises shaped everything else. I wrote them as plain sentences first and as code second.
+
+- A payment creates **exactly one** order, however many times the payment provider tells us about it.
+- A piece of stock is **never sold twice**, however many people reach for it at the same instant.
+- A new kind of product is **data**, not a deploy.
+
+<Flow
+  caption="The path of one purchase. The highlighted node is where the two hardest promises are kept."
+  nodes={[
+    { title: "Storefront", note: "Next.js 16 · ISR", highlight: false },
+    { title: "Medusa v2", note: "commerce core", highlight: true },
+    { title: "Razorpay", note: "payment + webhooks", highlight: false },
+    { title: "PostgreSQL", note: "orders, unique claims", highlight: false },
+    { title: "Redis", note: "stock locks, shared cache", highlight: false },
+  ]}
+/>
+
+I used MedusaJS to move the backend along quickly, and built the storefront on top of it. That let me spend my time on the parts that are specific to us.
+
+## The order that must happen once
+
+Payment providers don't promise to tell you something once. They promise to tell you at least once, and they retry when they think you didn't hear. A naive handler turns every retry into another order, and the customer finds out when two parcels arrive.
+
+So I wrote the Razorpay payment provider to treat every webhook as a claim to be won, not a message to be obeyed. Each event is verified with an HMAC signature first, so a forged request never reaches the database. Then it tries to insert the event's identity under a unique index. Exactly one attempt can win that insert, and every replay loses and walks away quietly. The price that finally gets charged is recomputed on the server from the catalogue, so nothing the browser sends can change what an item costs.
+
+<Decision
+  chose="A unique-index claim on every webhook event, instead of an in-memory check or a lock in application code."
+  because="The database is the one place every replica agrees on. A constraint can't be raced, and a check-then-insert in code can."
+  tradeoff="Every event costs one extra insert, and the provider code now owns a small table of claims to keep tidy."
+/>
+
+To test it, I did the unkind thing: fifty concurrent replays of the same webhook. The system produced one order.
+
+## The last item in the cart
+
+Overselling is a race wearing a business suit. Two buyers read "1 in stock" in the same millisecond, and both are right until the second write lands. For a small brand with limited pieces, that's a refund and an apology, and I'd rather not write either.
+
+I put a per-item lock in Redis in front of the stock decrement. Whoever holds the lock for that item decides, and everyone else waits and then sees the truth. To check it, I ran twenty-five rounds of fifty parallel buyers fighting over the same items. Zero oversells, in every round.
+
+<Decision
+  chose="Per-item Redis locks around stock changes."
+  because="The contention is per product, not per store, so locking a single item keeps unrelated purchases from waiting on each other."
+  tradeoff="Redis is now on the critical path of checkout, so its availability matters, and the lock lifetime needs careful tuning."
+/>
+
+## Pages that stay fast
+
+A storefront is read thousands of times for every time it's written. Rendering every view on demand would spend the backend's patience on work it has already done.
+
+The storefront uses incremental static regeneration, with a shared in-flight cache so that a burst of identical requests waits on one fetch instead of starting many. In a local load test, **211 thousand page requests reached the backend only twenty times.** That's the number I care about most, because it decides whether a launch-day spike is a celebration or an outage.
+
+## A catalogue that is data
+
+Fashion isn't one shape. One kind of product has sizes, another has dimensions, a third has neither. If each kind needs a developer and a deploy, every new idea waits on an engineer.
+
+So I modelled product types as data. A new type is a record with its own fields and rules, and the store understands it the moment it's saved. Because H&H will sell to people who read more than one script, validation understands Latin, Arabic and Devanagari text, so a name that looks right to its owner is accepted as such.
+
+<Metrics
+  items={[
+    { value: "1 order", label: "from 50 concurrent replays of the same webhook" },
+    { value: "0 oversells", label: "across 25 rounds of 50 parallel buyers" },
+    { value: "211K → 20", label: "page requests versus backend hits in a local load test" },
+  ]}
+/>
+
+Behind all of it sit more than 2,100 unit and integration tests, and an OpenAPI 3.1 description generated from the same Zod contracts the code uses, so the documentation can't drift from the truth.
+
+## What the store does for a brand
+
+Beyond the three promises, Hayaloom is built to feel like the apps people already love shopping in:
+
+- **Product codes.** Every product gets a short unique code, Meesho-style, so a follower can type it and land on exactly that item. No more "which one is that in the video?".
+- **Feature flags for every crucial thing**, so I can ship a risky change dark and turn it on when I'm ready.
+- **Global themes for events**, in the spirit of Blinkit and Meesho: the whole app can change its look for a festival or a sale.
+- **Launch and release hype.** Banners and events that build excitement before a drop.
+- **Insights and analytics**, so we can see what people actually look at.
+- **Custom labelling, embroidery and printing**, because a lot of what we sell can be personalised.
+
+## What comes next
+
+I plan to write the e-commerce core myself in Go, with only the things we actually need. Medusa got me to a working store quickly. Owning the core is how I make it lean, and how I learn exactly where every rupee and every item goes.
+
+## What I'd change
+
+Honestly, not much. The three promises held up under tests I built to break them, and the decisions above are ones I'd make again. The two things I'm keeping an eye on are the ones I named as trade-offs up front: Redis sitting on the critical path of checkout, and the lock lifetimes that go with it. And the one change I'm already making on purpose is the Go core.

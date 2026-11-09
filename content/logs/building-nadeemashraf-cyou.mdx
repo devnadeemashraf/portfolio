@@ -1,0 +1,83 @@
+---
+title: 'Building nadeemashraf.cyou: a portfolio that reads like a build log'
+date: 2026-11-09
+summary: How I designed and built a portfolio that works for a 30-second skim and a 10-minute read, on Next.js, Keystatic and Vercel, with a cat who has opinions.
+tags:
+  - Next.js
+  - Design
+---
+
+## Why a portfolio should tell a story
+
+Most portfolios I looked at were lists: a grid of projects, a wall of logos, a contact form. They told me what someone had touched, not how they think.
+
+Recruiters skim, so the page has to work at two speeds: a thirty-second scan for the facts, and a slower read for anyone who wants to see how I make decisions. That became the brief. Every section is a chapter, and every chapter is a commit on a single line running down the page.
+
+My work is a second constraint. I am a forward deployed engineer: I sit between a customer's problem and the code that solves it. So the site needed a recruiter's summary one tap away, every way of booking a call visible, and a reason to stay for the longer stories.
+
+## Picking the stack
+
+I wanted static pages wherever possible, because speed is the first thing a visitor notices. Next.js with the App Router gives me that. Pages render at build time, posts are MDX files in the repo, and Vercel deploys every push with its own preview link.
+
+There is no database. Projects, posts and my profile live as MDX and YAML files in the repo, and I edit them through a small admin screen instead of touching components.
+
+<Decision
+  chose="A Git-based CMS (Keystatic) instead of a hosted one."
+  because="Content stays as files in the repo, with an editing screen at /keystatic. No database, nothing extra to pay for, and every edit is reviewable history."
+  tradeoff="Every edit is a commit, so changes go live only after a short Vercel rebuild."
+/>
+
+Everything visible on the site comes from that content. A single checkbox in my profile, "open to roles", hides the availability pill, the recruiter card, the pulse and the relocation chip at once, because they all read the same field.
+
+## Text that fills as you read
+
+Each chapter on the home page opens with one sentence pinned on the left. As you scroll, its words turn from dim gray to white, one by one, while the projects slide in on the right. It uses CSS scroll-driven animations, so there are no scroll listeners in JavaScript. If your system asks for reduced motion, the sentence is simply white from the start.
+
+The rule I kept coming back to: the resting state is the finished page. Animation only ever starts from a dimmer state and returns to it, so a browser that cannot animate shows everything, fully readable.
+
+<Code
+  filename="story.css"
+  code={`/* Each word fills across its own slice of the section's scroll */
+.story { view-timeline-name: --sec; }
+.story .w {
+  animation: fill linear both;
+  animation-timeline: --sec;
+  animation-range: cover calc(40vh + var(--p0) * 85vh)
+                   cover calc(45vh + var(--p1) * 85vh);
+}
+@keyframes fill { from { color: var(--unread); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .story .w { animation: none; }
+}`}
+/>
+
+Firefox has no scroll-driven animations yet. There, a tiny IntersectionObserver fallback loads only when the feature check fails and drives the same effect.
+
+## Making it findable
+
+Each page sets its own title and description through the Metadata API, the sitemap and robots files are generated at build time, and every post gets its own Open Graph image. The home page also describes me to search engines with structured data.
+
+<Code
+  filename="lib/jsonld.ts"
+  code={`export function personJsonLd(p, socials) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: p.name,
+    jobTitle: p.role,
+    url: 'https://nadeemashraf.cyou',
+    sameAs: socials.map((s) => s.url),
+  };
+}`}
+/>
+
+For learning how people actually use the site, I wanted free tools only: Vercel's analytics and Speed Insights for visitors and performance, and PostHog's free tier for clicks and sections reached, running without cookies.
+
+## Rumi
+
+There is a Siamese cat on this site. He is loud, he is clingy, and he does not want to be held. You may see him walk across the screen. Try to pick him up and he will not be there. Everything in the interaction is his idea, not yours.
+
+## What I'd change
+
+[placeholder: write this after launch: what surprised you, what you would cut, and what you will build next.]

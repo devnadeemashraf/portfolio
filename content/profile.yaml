@@ -1,0 +1,62 @@
+name: Nadeem Ashraf
+monogram: na
+role: Senior Forward Deployed Engineer
+city: Lucknow, India
+heroHeadline: Forward deployed engineer who owns products end to end,
+heroHeadlineDim: from the first customer call to the last deploy.
+lead: >-
+  I'm Nadeem. For five years I've sat with US freight brokers, turned vague
+  asks into specs, then built, shipped and run the software myself in
+  TypeScript, React, Python and Go. I'm open to relocating.
+available: true
+availableLabel: Open to Senior FDE & full-stack roles
+relocation:
+  - UAE
+  - Saudi Arabia
+  - Singapore
+  - Malaysia
+  - US
+  - UK
+  - Canada
+startDate: 30 days from resignation (not serving notice)
+email: official.nadeemashraf@gmail.com
+siteUrl: https://nadeemashraf.cyou
+resumeSde: /resume/Nadeem_Ashraf_SDE_Master.pdf
+resumeFde: /resume/Nadeem_Ashraf_FDE_Master.pdf
+bookingLinks:
+  - title: Quick introduction
+    minutes: 15
+    summary: A brief conversation to connect, swap context and explore where we could work together.
+    idealFor: First-time conversations, networking and quick introductions.
+    url: https://cal.com/nadeemashraf/quick-introduction
+    primary: true
+  - title: Recruiter / career discussion
+    minutes: 30
+    summary: A focused chat about my experience, role expectations, team structure and the hiring process.
+    idealFor: Recruiters, talent teams and hiring managers exploring fit. Please share the role when booking.
+    url: https://cal.com/nadeemashraf/recruiter-career-discussion
+    primary: false
+  - title: Technical discussion
+    minutes: 30
+    summary: Architecture, system design, full-stack trade-offs and how to approach a hard implementation.
+    idealFor: Engineers and teams who want a technical conversation or a knowledge swap.
+    url: https://cal.com/nadeemashraf/technical-discussion
+    primary: false
+  - title: Engineering consultation
+    minutes: 45
+    summary: A dedicated session on architecture reviews, performance, scalability and integrations.
+    idealFor: Teams who want a second perspective on a technical problem. Share a short overview when booking.
+    url: https://cal.com/nadeemashraf/engineering-consultation
+    primary: false
+  - title: Product & architecture discussion
+    minutes: 60
+    summary: "Turning product requirements into practical engineering: feasibility, scalability, trade-offs and technology choices."
+    idealFor: Founders, product managers and engineering leaders working through complex product decisions.
+    url: https://cal.com/nadeemashraf/product-architecture-discussion
+    primary: false
+  - title: Client discovery / project discussion
+    minutes: 60
+    summary: Discovery on your business goals, workflows, current infrastructure and automation opportunities.
+    idealFor: Businesses and founders exploring custom software or workflow automation. Share a brief overview of your needs.
+    url: https://cal.com/nadeemashraf/client-discovery-project-discussion
+    primary: false

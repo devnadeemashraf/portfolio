@@ -18,3 +18,4 @@ content-drafts/
 public/resume/*
 !public/resume/Nadeem_Ashraf_SDE_Master.pdf
 !public/resume/Nadeem_Ashraf_FDE_Master.pdf
+.shots-*.png
