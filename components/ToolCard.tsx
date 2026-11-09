@@ -14,7 +14,7 @@ export function ToolCard({ t, index = 0 }: { t: Tool; index?: number }) {
       </ul>
       <div className="card-actions">
         <Link href={`/open-source/${t.slug}`} className="btn btn-primary btn-sm">
-          Read more <ArrowRight className="nudge" size={16} />
+          Read about {t.title} <ArrowRight className="nudge" size={16} />
         </Link>
         {t.repoUrl && (
           <a className="link" href={t.repoUrl} target="_blank" rel="noopener noreferrer" data-track="outbound" data-label={`repo:${t.slug}`}>

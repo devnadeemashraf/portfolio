@@ -66,6 +66,10 @@ The rule I kept coming back to: the resting state is the finished page. Animatio
 
 Firefox has no scroll-driven animations yet. There, a tiny IntersectionObserver fallback loads only when the feature check fails and drives the same effect.
 
+## A headline that morphs
+
+The hero headline changes with the role: forward deployed, full-stack, software. Each role has its own sentence, and they cross-dissolve through a blur into each other. All of the variants sit in one CSS grid cell, so the slot is always as tall as the tallest one and nothing around it moves. Under reduced motion, the first role simply stays.
+
 ## Cards that stack, one section at a time
 
 On the inner pages, cards stick and stack as you scroll, so a fast scroll can't skip past one before you've read it. The rule I settled on is that stacking belongs to a section. Each group of cards lives in its own container, so when a group ends, its cards release and the next group starts stacking from scratch. Anything that isn't a group of cards simply scrolls.
@@ -75,6 +79,8 @@ It's a plain CSS rule: `position: sticky` only holds inside its parent, so givin
 ## Glass
 
 The things that float above the page, such as the navigation bar, the sheets, the menu and the tooltips, are translucent with a backdrop blur. It keeps the page feeling like one surface and shows depth without adding colour. Where a browser doesn't support backdrop blur, they fall back to a solid surface.
+
+This one bit me. For a while the blur silently didn't work in Chrome and Edge. I had written `backdrop-filter` and then `-webkit-backdrop-filter` with the same value, and the CSS minifier treated the second as a duplicate and kept only the prefixed one, which Chromium ignores. The fix was to write the prefixed one first and the standard one last. I only found it because I read the computed style in the browser instead of trusting the source.
 
 ## Making it findable
 
@@ -99,6 +105,27 @@ For learning how people use the site, I wanted free tools only: Vercel's analyti
 ## Rumi
 
 There's a Siamese cat on this site. His name is Rumi, and he's written up as a character before he was drawn: a young adult who is curious, affectionate and independent, and who decides when. He comes over, naps near your cursor if you hold still, ignores a cotton ball or pounces on it, and walks away when he's had enough. He communicates with short sounds and body language, never sentences, and he never guilts you for leaving. Everything he does is his idea, not yours.
+
+## What I measured
+
+I profiled the production build with Lighthouse (mobile, default throttling) and a scripted Edge session driven over the DevTools protocol. These are my numbers on my machine, so treat them as a baseline rather than a promise.
+
+<Metrics
+  items={[
+    { value: "99-100", label: "Lighthouse performance on all seven page types, with CLS 0" },
+    { value: "0.8-1.0 s", label: "largest contentful paint, mobile emulation" },
+    { value: "0", label: "long tasks and zero frames over 50 ms while scrolling the home page" },
+  ]}
+/>
+
+- **Everything is static.** The build prerenders 22 pages and there is no server runtime to wait on.
+- **First load is about 190 KB of JavaScript, gzipped.** Roughly 70 KB is React DOM, 55 KB is the Next.js runtime, and 39 KB is my own code, which includes the sheets, the cat and the analytics wiring. CSS is a single 9.8 KB file and a page's HTML is 10 to 19 KB.
+- **Analytics don't count against that.** PostHog is about 350 KB uncompressed, and it loads lazily after the page is interactive, so it isn't in the first load at all.
+- **Scrolling is cheap.** Over a 4,800 px scroll, the page spent 25 ms in scripts and no time in layout. Frames stayed at 16.7 ms, the heap sat at 4.8 MB, and the DOM has about 1,300 nodes. That's because the text fill and the card reveals are scroll-driven CSS animations, so there is no scroll handler to run.
+- **Accessibility is 100 on every page except Home, which is 96.** The gap is the dim words in the scroll fill, which are meant to read as unread. They're a transient state, and the resting text passes contrast.
+- **The cat is free until it moves.** The purr and the meows are synthesized with the Web Audio API, so there are no audio files to download. The cat's sprite is an inline SVG built from a string grid.
+
+The limits are real. The scroll test ran in headless Edge without a GPU and without CPU throttling, and I haven't tested Firefox, Safari or a real phone. Lighthouse's own mobile run is the closest I have to a slow device.
 
 ## What I'd change
 
