@@ -32,6 +32,7 @@
   /* radius */
   --r-1: 6px; --r-2: 9px; --r-3: 12px; --r-4: 16px; --r-5: 22px; --r-full: 999px;
 
+  --font-mono: var(--font-geist-mono);
   --header-h: 64px;
   --container: 1200px;
   --gutter: clamp(20px, 5vw, 48px);

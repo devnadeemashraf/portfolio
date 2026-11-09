@@ -1,7 +1,8 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 import { block } from '@keystatic/core/content-components';
 
-const isProd = process.env.NODE_ENV === 'production';
+// Local files in development. Set NEXT_PUBLIC_KEYSTATIC_STORAGE=github in Vercel to edit via GitHub.
+const useGithub = process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'github';
 
 /** Custom MDX blocks shared by projects and build logs. */
 const components = {
@@ -61,7 +62,7 @@ const components = {
 };
 
 export default config({
-  storage: isProd
+  storage: useGithub
     ? { kind: 'github', repo: 'devnadeemashraf/portfolio' }
     : { kind: 'local' },
 

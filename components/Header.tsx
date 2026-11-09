@@ -19,7 +19,7 @@ export function Header({ name, monogram, available, availableLabel, resumeSde, r
   return (
     <header className="site-header">
       <div className="container header-row">
-        <Link href="/" className="brand" aria-label={`${name}, home`}>
+        <Link href="/" className="brand">
           <span className="brand-mark" aria-hidden="true">{monogram}</span>
           <span className="brand-name">{name}</span>
         </Link>

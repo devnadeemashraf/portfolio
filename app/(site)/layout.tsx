@@ -6,6 +6,7 @@ import '../../styles/components.css';
 import '../../styles/story.css';
 import '../../styles/prose.css';
 import '../../styles/transitions.css';
+import '../../styles/rumi.css';
 import { getProfile, getRecruiter, getSocials, getUi } from '@/lib/content';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';

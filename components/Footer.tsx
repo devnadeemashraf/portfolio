@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Rss } from './Icons';
+import { FooterRumi } from './easter/FooterRumi';
 
 export function Footer({ name, tagline }: { name: string; tagline: string }) {
   return (
@@ -13,6 +14,7 @@ export function Footer({ name, tagline }: { name: string; tagline: string }) {
           <a className="link" href="#top">Back to top</a>
         </nav>
       </div>
+      <div className="container"><FooterRumi /></div>
     </footer>
   );
 }

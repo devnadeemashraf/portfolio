@@ -1,7 +1,7 @@
 /* Scroll story. Resting state = finished, readable. Animation only starts from the dim state. */
 
 .story { padding-block: clamp(64px, 10vw, 120px); }
-.split { display: grid; grid-template-columns: 1fr; gap: 28px var(--split-gap); }
+.split { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px var(--split-gap); }
 
 .chap { display: flex; align-items: center; gap: 16px; margin: 0 0 24px; font-size: 12.5px; }
 .chap .bar { display: block; flex: 0 1 220px; height: 1px; background: var(--line); overflow: hidden; }
@@ -15,7 +15,7 @@
 
 /* desktop: 5:6 split, sticky left column */
 @media (min-width: 760px) {
-  .split { grid-template-columns: 5fr 6fr; }
+  .split { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
   .stick { position: sticky; top: 112px; align-self: start; }
 }
 

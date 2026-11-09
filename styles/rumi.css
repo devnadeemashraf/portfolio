@@ -1,0 +1,49 @@
+:root {
+  --rumi-body: #cfcfcf;
+  --rumi-points: #3f3f3f;
+  --rumi-eye: #f5f5f5;
+  --rumi-nose: #8a8a8a;
+}
+:root[data-theme='light'] {
+  --rumi-body: #bdbdbd;
+  --rumi-points: #1f1f1f;
+  --rumi-eye: #fafafa;
+  --rumi-nose: #6b6b6b;
+}
+
+.rumi-layer { position: fixed; inset: 0; z-index: 15; pointer-events: none; overflow: hidden; }
+.rumi-host { position: absolute; left: 0; top: 0; will-change: transform; }
+.rumi-actor { position: relative; display: block; pointer-events: auto; cursor: default; touch-action: manipulation; }
+.rumi-sprite { display: block; }
+.rumi-bubble {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; translate: -50% 0; white-space: nowrap;
+  padding: 6px 10px; border-radius: var(--r-3); border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 12px; line-height: 1.2;
+}
+
+/* two-frame walk cycle */
+.rumi-sprite .f2 { visibility: hidden; }
+[data-walking] .rumi-sprite .f1 { animation: rumi-f1 0.34s steps(1) infinite; }
+[data-walking] .rumi-sprite .f2 { animation: rumi-f2 0.34s steps(1) infinite; }
+@keyframes rumi-f1 { 0% { visibility: visible; } 50% { visibility: hidden; } }
+@keyframes rumi-f2 { 0% { visibility: hidden; } 50% { visibility: visible; } }
+
+.rumi-paw { position: absolute; opacity: 0; animation: paw-fade 4.2s ease-out forwards; margin: -7px 0 0 -7px; }
+@keyframes paw-fade { 0% { opacity: 0.7; } 60% { opacity: 0.35; } 100% { opacity: 0; } }
+
+.rumi-rain { position: absolute; top: -30px; animation: paw-rain 2.6s cubic-bezier(0.3, 0.1, 0.5, 1) forwards; opacity: 0; }
+@keyframes paw-rain { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(105vh) rotate(220deg); opacity: 0; } }
+
+/* footer perch */
+.footer-rumi { position: relative; display: flex; justify-content: flex-end; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.rumi-perch { display: grid; place-items: end center; min-width: 44px; min-height: 44px; margin-bottom: -28px; transition: transform var(--dur-base) var(--ease-out); }
+.rumi-perch:hover { transform: translateY(-3px); }
+.rumi-voice { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-full); font-size: 12px; color: var(--muted); transition: border-color var(--dur-base) var(--ease-out); }
+.rumi-voice:hover { border-color: var(--ink); }
+.rumi-line { flex-basis: 100%; text-align: right; min-height: 1.4em; font-size: 12px; color: var(--muted); margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rumi-perch { transition: none; }
+  .rumi-perch:hover { transform: none; }
+  .rumi-layer { display: none; }
+}
+@media print { .rumi-layer, .footer-rumi { display: none; } }
