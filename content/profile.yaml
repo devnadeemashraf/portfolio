@@ -4,23 +4,44 @@ role: Senior Software & Forward Deployed Engineer
 roles:
   - word: Forward deployed
     title: Senior Forward Deployed Engineer
+    headline: engineer who owns products end to end,
+    dim: from the first customer call to the last deploy.
   - word: Full-stack
     title: Senior Full-Stack Engineer
+    headline: engineer who ships features end to end,
+    dim: from the schema to the interface to production.
   - word: Software
     title: Senior Software Engineer
+    headline: engineer who builds services that hold up,
+    dim: from the first design to the last deploy.
 city: Lucknow, India
 heroHeadline: engineer who owns products end to end,
 heroHeadlineDim: from the first customer call to the last deploy.
 lead: >-
-  I'm Nadeem. For the last five years I've worked side by side with US freight
-  brokers. They bring me a messy problem, I shape it into a clear spec, and then
-  I build it, ship it and keep it running myself, in TypeScript, React, Python
-  and Go. I love owning the whole thing, and I'm open to moving for the right team.
+  I'm Nadeem. For the last five years I've built freight software for US
+  brokers: designing it, shipping it and keeping it running, in TypeScript,
+  React, Python and Go. I love owning the whole thing, and I'm open to moving
+  for the right team.
 available: true
 availableLabel: Open to new roles
 workModes:
-  - Remote
-abroadLabel: Abroad · visa sponsorship needed
+  - mode: Remote
+    note: Flexible shifts. I can collaborate until 1 AM IST, and I already work 4 PM to 1 AM for US overlap.
+  - mode: On-site or hybrid
+    note: Morning shifts only.
+indiaCities:
+  - Hyderabad
+  - Noida
+  - Delhi NCR
+  - Gurgaon
+  - Pune
+  - Bengaluru
+  - Mumbai
+  - Chennai
+  - Ahmedabad
+  - Kolkata
+  - Kochi
+abroadLabel: Abroad · Visa Sponsorship Required
 relocation:
   - UAE
   - Saudi Arabia
@@ -29,13 +50,6 @@ relocation:
   - US
   - UK
   - Canada
-indiaCities:
-  - Bengaluru
-  - Hyderabad
-  - Pune
-  - Mumbai
-  - Delhi NCR
-  - Chennai
 startDate: 30 days from resignation (not serving notice)
 email: official.nadeemashraf@gmail.com
 siteUrl: https://nadeemashraf.cyou

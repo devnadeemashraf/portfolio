@@ -24,7 +24,7 @@ export type SheetData = {
     workPreference: string;
     relocationNote: string;
     visaNote: string;
-    highlights: string[];
+    qualities: { title: string; text: string }[];
   };
   ui: {
     bookCta: string;
@@ -32,6 +32,7 @@ export type SheetData = {
     resumeLabel: string;
     recruiterEyebrow: string;
     navWork: string;
+    navProjects: string;
     navLogs: string;
     navAbout: string;
     navContact: string;
@@ -146,6 +147,31 @@ export function EmailCopy({ email, copy, copied }: { email: string; copy: string
   );
 }
 
+/** The address itself is the control: hover or focus shows "Click to copy", click copies it. */
+export function EmailLine({ email }: { email: string }) {
+  const [done, setDone] = useState(false);
+  const t = useRef<ReturnType<typeof setTimeout>>(undefined);
+  return (
+    <button
+      type="button"
+      className="email-line"
+      data-done={done || undefined}
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+        } catch {}
+        track('email_copy');
+        setDone(true);
+        clearTimeout(t.current);
+        t.current = setTimeout(() => setDone(false), 1600);
+      }}
+    >
+      <span className="mono">{email}</span>
+      <span className="email-hint" aria-live="polite">{done ? 'Copied' : 'Click to copy'}</span>
+    </button>
+  );
+}
+
 export function SheetsProvider({ data, children }: { data: SheetData; children: ReactNode }) {
   const [open, setOpen] = useState<SheetName | null>(null);
   const show = useCallback((n: SheetName) => setOpen(n), []);
@@ -167,6 +193,7 @@ export function SheetsProvider({ data, children }: { data: SheetData; children: 
           <CloseButton />
         </header>
         <dl className="facts">
+          <div><dt className="label">Email</dt><dd><EmailLine email={data.email} /></dd></div>
           <div><dt className="label">Looking for</dt><dd>{r.lookingFor.join(' · ')}</dd></div>
           <div><dt className="label">Experience</dt><dd>{r.experience}</dd></div>
           <div><dt className="label">Core stack</dt><dd className="chips">{r.coreStack.map((s) => <span className="chip" key={s}>{s}</span>)}</dd></div>
@@ -175,22 +202,16 @@ export function SheetsProvider({ data, children }: { data: SheetData; children: 
           <div><dt className="label">Relocation</dt><dd>{r.relocationNote}</dd></div>
           <div><dt className="label">Visa</dt><dd>{r.visaNote}</dd></div>
         </dl>
-        {r.highlights.length > 0 && (
-          <ul className="bullets">
-            {r.highlights.map((h) => <li key={h}>{h}</li>)}
-          </ul>
+        {r.qualities.length > 0 && (
+          <>
+            <p className="label qualities-label">What I'm good at</p>
+            <ol className="qualities">
+              {r.qualities.map((q) => (
+                <li key={q.title}><strong>{q.title}</strong><span className="muted">{q.text}</span></li>
+              ))}
+            </ol>
+          </>
         )}
-        <div className="sheet-actions">
-          {primary && (
-            <a className="btn btn-primary" href={primary.url} target="_blank" rel="noopener noreferrer" data-track="book_click" data-label={primary.title}>
-              <Calendar /> {ui.bookCta} <ArrowRight className="nudge" />
-            </a>
-          )}
-          <a className="btn btn-ghost" href={data.resumeFde} download data-track="resume_download" data-label="fde">
-            <Download /> {ui.resumeLabel}
-          </a>
-        </div>
-        <EmailCopy email={data.email} copy={ui.copyLabel} copied={ui.copiedLabel} />
       </Sheet>
 
       {/* Booking chooser: every Cal.com event type */}
@@ -227,9 +248,10 @@ export function SheetsProvider({ data, children }: { data: SheetData; children: 
         </header>
         <nav aria-label="Mobile" className="menu-links">
           {[
-            ['/#work', ui.navWork],
+            ['/work', ui.navWork],
+            ['/projects', ui.navProjects],
             ['/logs', ui.navLogs],
-            ['/#path', ui.navAbout],
+            ['/about', ui.navAbout],
             ['/#contact', ui.navContact],
           ].map(([href, text], i) => (
             <a key={href} href={href} style={{ '--i': i } as React.CSSProperties} onClick={hide}>

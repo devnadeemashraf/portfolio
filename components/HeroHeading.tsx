@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-type Role = { word: string; title: string };
+type Role = { word: string; title: string; headline: string; dim: string };
 
 /**
- * Hero eyebrow + headline with a role flip: "Forward deployed" / "Full-stack" / "Software".
+ * Hero eyebrow + headline with a role flip. Each role carries its own headline (customer calls belong to the FDE variant only).
  * All variants are stacked in one grid cell, so the slot never changes size (no layout shift).
  * Screen readers get one static sentence; the animated copy is aria-hidden.
  * Without JS, or under reduced motion, the first role simply stays.
@@ -14,14 +14,10 @@ export function HeroHeading({
   name,
   city,
   roles,
-  headline,
-  dim,
 }: {
   name: string;
   city: string;
   roles: Role[];
-  headline: string;
-  dim: string;
 }) {
   const [i, setI] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
@@ -46,9 +42,7 @@ export function HeroHeading({
     };
   }, [roles.length]);
 
-  const spoken = roles.map((r) => r.word.toLowerCase()).reduce((a, w, k, all) => (k === 0 ? w : k === all.length - 1 ? `${a} and ${w}` : `${a}, ${w}`), '');
-
-  const stack = (key: 'word' | 'title') =>
+  const stack = (key: 'title' | 'headline') =>
     roles.map((r, k) => (
       <span
         key={r.word}
@@ -56,7 +50,16 @@ export function HeroHeading({
         data-active={k === i || undefined}
         data-leaving={k === prev && k !== i ? true : undefined}
       >
-        {r[key]}
+        {key === 'title' ? (
+          r.title
+        ) : (
+          <>
+            <span className="hero-h-word">{r.word}</span>
+            <span className="hero-h-rest">
+              {r.headline} <span className="dim">{r.dim}</span>
+            </span>
+          </>
+        )}
       </span>
     ));
 
@@ -67,13 +70,8 @@ export function HeroHeading({
         <span className="sr-only">{roles[0]?.title}</span>
       </p>
       <h1 className="display" id="hero-title">
-        <span className="sr-only">{`${spoken} ${headline} ${dim}`}</span>
-        <span aria-hidden="true" className="hero-h">
-          <span className="flip flip-word" data-anim={prev !== null || undefined}>{stack('word')}</span>
-          <span className="hero-h-rest">
-            {headline} <span className="dim">{dim}</span>
-          </span>
-        </span>
+        <span className="sr-only">{`${roles[0]?.word} ${roles[0]?.headline} ${roles[0]?.dim}`}</span>
+        <span aria-hidden="true" className="hero-h flip flip-word" data-anim={prev !== null || undefined}>{stack('headline')}</span>
       </h1>
     </>
   );

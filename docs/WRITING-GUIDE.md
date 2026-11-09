@@ -4,13 +4,15 @@ Read this whenever Nadeem asks you to write or edit content for this site: a **p
 
 ## 0. Hard rules
 
-1. **Facts only.** Use only facts Nadeem gives you or that are already in the repo (`content/`, the résumés in his messages). Never invent employers, numbers, dates, dependencies, users, outcomes or opinions. Missing fact → write `[placeholder: what is needed]` and list every placeholder at the end of your reply.
+1. **Facts only.** Use only facts Nadeem gives you or that are already in the repo (`content/`, the résumés in his messages). Never invent employers, numbers, dates, dependencies, users, outcomes or opinions. Missing fact → prefer leaving the sentence out. If it is genuinely needed, write `[placeholder: what is needed]` and list every placeholder at the end of your reply. The site is live, so placeholders must never ship: resolve them before publishing.
 2. **Numbers need a source.** Every metric carries what it measures and how (e.g. "in a local load test"). Never round up. Never present a test result as production traffic.
 3. **Privacy.** Do not name customers or clients. Do not describe a company's internal systems beyond what Nadeem has said is public. Anything he has marked private stays out of every file, including docs and commit messages. When unsure, ask.
 4. **Honest scope.** State project status plainly (pre-launch, in progress, shipped, experiment). Do not oversell prototypes.
-5. **Grayscale site.** Never add colour, emoji or decorative symbols to content. (Rumi the cat is the only coloured thing, and he lives in code, not content.)
+5. **Technical and impersonal.** Never mention family, relationships, follower counts of someone else's account, or any personal life detail in site content, docs or commit messages. Write for a technical reviewer: the problem, the decisions, the evidence. This applies to every project, always.
+6. **Employer and stealth work stays out.** Do not write about a current employer's projects or internal systems, or about any project Nadeem hasn't said is public. If he mentions a project as private or in stealth, it appears in no file in the repo, including docs, handoff notes and commit messages. Side projects and open-source tooling are fine; label each honestly as "built at work" or "side project".
+7. **Grayscale site.** Never add colour, emoji or decorative symbols to content. (Rumi the cat is the only coloured thing, and he lives in code, not content.)
 
-## 1. Voice (the whole site must sound like one person)
+## 1. Voice (and what to leave out) (the whole site must sound like one person)
 
 Nadeem **speaking**, first person, to a smart colleague over coffee.
 
@@ -33,9 +35,9 @@ Sample lines in the right voice:
 
 | Content | File | Page |
 | --- | --- | --- |
-| Project case study | `content/projects/<slug>.mdx` | `/work/<slug>` |
+| Side-project case study | `content/projects/<slug>.mdx` | `/projects/<slug>` |
 | Build log / blog post | `content/logs/<slug>.mdx` | `/logs/<slug>` |
-| Open-source tool page | `content/tools/<slug>.mdx` | `/open-source/<slug>` |
+| Open-source tool page (`origin: work` or `side`) | `content/tools/<slug>.mdx` | `/open-source/<slug>`, listed on `/work` or `/projects` |
 | Profile, home sentences, recruiter sheet, UI strings | `content/*.yaml` | everywhere |
 
 Slugs are kebab-case and match the title. Dates are `YYYY-MM-DD`. YAML values containing `: ` must be quoted. Never edit `keystatic.config.ts` or components to add content; if the schema lacks a field, tell Nadeem.
@@ -67,7 +69,7 @@ Frontmatter: `title, date, summary (one sentence, used for SEO and the card), ta
 
 ## 5. Open-source tool page (short)
 
-Frontmatter: `title, tagline, kind, status, stack[], repoUrl, siteUrl, install, order`. Body (under 250 words): **What it is** → **Why I built it** → **Use it** (install command and a 5-line example). Placeholders for anything unknown, especially repo URLs and usage examples.
+Frontmatter: `title, tagline, kind, origin (work | side), status, stack[], repoUrl, siteUrl, install, order`. Body (under 250 words): **What it is** → **Why I built it** → **Use it** (install command and a 5-line example). Placeholders for anything unknown, especially repo URLs and usage examples.
 
 ## 6. MDX blocks (use exactly this syntax)
 

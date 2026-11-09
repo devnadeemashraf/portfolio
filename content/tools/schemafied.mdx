@@ -1,10 +1,12 @@
 ---
 title: schemafied
-tagline: A Python schema validator, open-sourced from the internal services I built it for.
-kind: Python package
-status: Published on PyPI
+tagline: A Python library that checks nested data against a schema and reports every error at once, with the exact path to each one.
+kind: Python library
+origin: work
+status: v1.0.0 on PyPI
 stack:
   - Python
+  - Zero dependencies
 repoUrl: https://github.com/devnadeemashraf/schemafied
 siteUrl: https://pypi.org/project/schemafied/
 install: pip install schemafied
@@ -13,16 +15,41 @@ order: 1
 
 ## What it is
 
-schemafied checks that data has the shape you expect before the rest of your code touches it. I wrote it for internal services where a payload with a missing or wrong field turns into a confusing error three layers down, and I open-sourced it so others can use it too.
+Schemafied validates a dictionary against a schema you describe in code. You declare fields (numbers, strings, lists, nested dictionaries), and it tells you whether the data fits.
+
+I built it at work as internal tooling, then open-sourced it. It has no runtime dependencies and ships with type hints.
 
 ## Why I built it
 
-[placeholder: one or two sentences on the problem that made you write it, in your own words.]
+Most validators stop at the first problem. If a payload has five things wrong, you fix one, resubmit, and meet the next. Schemafied collects every error in one pass, and each one carries the path to the exact field, like `users[0].profile.age`.
+
+<Metrics
+  items={[
+    { value: "60", label: "test cases across 6 test files" },
+    { value: "0", label: "runtime dependencies" },
+    { value: "~1,000", label: "lines of library code" },
+  ]}
+/>
 
 ## Use it
 
-```bash
-pip install schemafied
+```python
+from schemafied import Schema, NumberField, StringField
+
+schema = Schema({
+    "name": StringField(min_length=1, max_length=100),
+    "age": NumberField(min_value=0, max_value=120),
+})
+
+result = schema.validate({"name": "Alice", "age": 28})
 ```
 
-[placeholder: a short usage example, five lines or fewer.]
+Fields can be optional with defaults, can coerce compatible types, and accept your own validator functions. Large lists can cap how many item errors they report, so a bad payload of a thousand rows doesn't produce a thousand messages.
+
+## How it's built
+
+The library is small on purpose: a `Schema`, a base `Field`, four field types, a validation context that gathers errors as it walks the data, and an exception that holds them all. Each field type owns its own rules, so adding a new one means writing one class.
+
+## What I'd change
+
+I'd add JSON Schema export, so a schema defined once can also describe an API. It's the first thing I'd build next.

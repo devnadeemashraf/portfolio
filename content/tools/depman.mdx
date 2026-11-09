@@ -1,24 +1,59 @@
 ---
 title: depman
-tagline: A Go dependency checker, open-sourced from the internal services I built it for.
-kind: Go tool
-status: Open source
+tagline: A Go library and CLI that checks, installs and verifies the system-level tools your application needs, from one YAML file.
+kind: Go library and CLI
+origin: work
+status: v1.0 on GitHub
 stack:
   - Go
+  - YAML
 repoUrl: https://github.com/devnadeemashraf/depman
 siteUrl: ''
-install: ''
+install: go get github.com/devnadeemashraf/depman
 order: 2
 ---
 
 ## What it is
 
-depman checks a project's dependencies so you can see what you're relying on and what needs attention. I wrote it in Go for internal services and open-sourced it afterwards.
+Depman manages the things your code needs that no package manager covers: Node.js, Python, a database server. You list them once in a YAML file, with the version you require and how to install and verify each one on Windows, Linux and macOS. Depman then checks what's on the machine, installs what's missing, and confirms it worked.
+
+I built it at work as internal tooling, then open-sourced it.
 
 ## Why I built it
 
-[placeholder: one or two sentences on the problem that made you write it, in your own words.]
+A service that depends on a runtime fails in confusing ways when that runtime is missing or the wrong version. I wanted the application to find out at start-up, say so clearly, and fix it when it could.
+
+<Metrics
+  items={[
+    { value: "3", label: "operating systems: Windows, Linux, macOS" },
+    { value: "13", label: "Go files, about 2,200 lines" },
+    { value: "check, ensure", label: "the two commands you actually use" },
+  ]}
+/>
 
 ## Use it
 
-[placeholder: install command and one usage example.]
+```yaml
+version: "1.0"
+name: "My Application"
+dependencies:
+  - name: "nodejs"
+    version:
+      required: "16.15.1"
+      constraint: "^16.0.0"
+```
+
+```go
+manager, err := depman.NewManager("")
+results, err := manager.EnsureDependencies()
+```
+
+Versions use semantic-version constraints, installers and commands are configured per platform, and each dependency can set environment variables.
+
+## How it's built
+
+A public `pkg/depman` package holds the API and config loading. Internal packages handle downloading, environment variables and the manager. The command line is built with Cobra, and the unit tests cover config discovery, platform selection and version compatibility.
+
+## What I'd change
+
+The test suite is thin where it touches real installers, because those need a clean machine. I'd run the install paths in throwaway containers in CI.

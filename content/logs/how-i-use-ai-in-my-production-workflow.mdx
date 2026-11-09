@@ -1,7 +1,7 @@
 ---
 title: How I use AI in my production workflow
 date: 2026-11-09
-summary: The tools I use, the habits that keep me in charge of what ships, and the things I'm still learning to bring in.
+summary: The loop, the files and the guardrails I put around coding agents so that I stay in charge of what ships, and what I'm still learning to add.
 tags:
   - AI
   - Workflow
@@ -9,57 +9,91 @@ tags:
 
 ## The rule I start with
 
-AI writes code quickly, and I own what ships. Those two sentences sit at the centre of how I work. If I can't explain a change in a review, it doesn't go in, however fast it was written.
+AI writes code quickly, and I own what ships. If I can't explain a change in review, it doesn't go in, however fast it was written.
 
-I've put AI tools into my everyday production work, and the thing that made them useful was never the tool. It was the process I wrapped around it.
+Five years in, I've stopped asking which model is best. The results come from the process around it: what the agent reads before it starts, what it has to prove before it stops, and what it isn't allowed to do. Most of this isn't my invention. It's close to what Anthropic recommends for Claude Code and what GitHub's spec-driven tooling does, adapted to how I work. I've listed my sources at the end.
 
-## Specs before code
+## The loop
 
-I don't start by asking a model to build something. I start with a spec. In my workflow it's a short blueprint document: the problem, the behaviour I want, the edge cases, and what's out of scope.
+Anthropic's guidance for agentic coding comes down to a rhythm: explore the code, plan, implement, verify, commit. Mine is the same rhythm with more of it written down. This is the loop my latest project, [slayply](/open-source/slayply), runs on, and every coding session follows it.
 
-Then I review the spec before any code is generated. That one habit catches more mistakes than anything else I do, because a wrong assumption is cheap to fix in a paragraph and expensive to fix in a pull request.
-
-<Decision
-  chose="Review the spec before generation, instead of reviewing only the code afterwards."
-  because="The model builds exactly what the spec says, so a vague or wrong spec produces confident, wrong code."
-  tradeoff="It adds a few minutes of writing before anything runs, and it can feel slower on the first day of a feature."
+<Flow
+  caption="One session, start to finish. A human reviews and merges; the agent never does."
+  nodes={[
+    { title: "Read the pointer", note: "what's next, what's broken", highlight: false },
+    { title: "Read the spec", note: "only the relevant section", highlight: false },
+    { title: "Failing tests first", note: "the change is defined by a test", highlight: true },
+    { title: "Smallest change", note: "run the full check", highlight: false },
+    { title: "Self-review, then PR", note: "update the pointer", highlight: false },
+  ]}
 />
 
-## Handoff files, so context is never lost
+## Spec before code
 
-A model forgets everything between sessions, and so do I. So I keep a handoff file next to the work. It says what's done, what's next, which decisions are settled, and where to resume.
+I don't ask a model to build something. I write a spec: the problem, the behaviour, the edge cases and what's out of scope. Then I review it before any code exists. A wrong assumption costs a sentence to fix in a spec and a day to fix in a pull request.
 
-This very site is built that way. The repo carries a plan, a roadmap and a handoff file, and a fresh session can pick up from them without me explaining the project again. The same idea carries context across pull requests at work.
+This is the idea behind GitHub's Spec Kit, where a specification drives the plan, the task list and the implementation. I keep the specification in the repo as one file, plus an architecture decision record for every non-obvious choice. Slayply has twenty-three of them.
 
-## Tests are the leash
+<Decision
+  chose="Review the spec before generation, not only the code after."
+  because="The model builds what the spec says, so a vague spec produces confident, wrong code."
+  tradeoff="A few minutes of writing before anything runs, which feels slow on the first day of a feature."
+/>
 
-Generated code gets the same tests as code I wrote by hand: unit tests for the logic, integration tests for the seams, and end-to-end tests for the journeys that matter. I'd rather trust a green suite than my own reading of a diff at the end of a long day.
+## Tell the agent what it can't see
 
-## The tools, and what each is for
+An agent reads the repo, but it can't read my head: the deploy process, the file it must never touch, the rule my team agreed last month. Anthropic's advice is to put that in a project file the agent loads every session. I do, with two rules:
 
-I use more than one, because they're good at different things:
+- **One source of truth.** `AGENTS.md` holds the rules. `CLAUDE.md`, the Cursor rules and the Copilot instructions only point to it, so tools never disagree.
+- **A handoff pointer.** One file says what's done, what's next and what's broken. Every session starts by reading it and ends by updating it, so a fresh session resumes without me re-explaining anything.
 
-- **Claude Code** for work that spans many files and needs a plan, and for running a spec-driven loop.
-- **Cursor** for quick edits and exploring a codebase inside the editor.
-- **Antigravity** for trying agent-style workflows.
+This portfolio works the same way: a plan, a roadmap and a handoff file.
+
+## Make it prove the work
+
+"It looks right" isn't evidence. Before an agent may finish, it runs one command that does the type-check, lint and tests. Tests are the leash: I want a green suite telling me the change is safe, not my own tired reading of a diff.
+
+Agents also invent APIs. So I make them check the installed type definitions or the package registry before using a function, and I record verified versions in one file. It's a small rule that has saved me many confusing build errors.
+
+## Guardrails that don't depend on good behaviour
+
+Instructions can be ignored. Hooks can't. In slayply, a hook script runs around the agent's actions. It blocks edits to the spec and the lockfile, blocks commits to `main`, force-pushes and merges, and refuses to open a pull request unless the handoff pointer was updated. I added subagents with narrow jobs: an architect for trade-offs, a reviewer that checks the diff against my coding standards, and a red-team pass that hunts for bypasses.
+
+<Decision
+  chose="Enforce the rules that must never break with hooks, and leave the rest to written guidance."
+  because="A rule in a prompt is a request. A hook is a guarantee."
+  tradeoff="Hooks need maintaining, and they occasionally block something I did want to do, which means stopping to override them on purpose."
+/>
+
+## The tools, and when I use each
+
+I use more than one:
+
+- **Claude Code** for work that spans files and needs a plan.
+- **Cursor** for quick edits and reading around a codebase.
+- **Antigravity** to try agent-first workflows.
 - **The OpenAI and Gemini APIs** when I'm building something with a model inside it.
-- **Graphify**: [placeholder: one line on what you use it for].
 
 ## Monitored vibe-coding
 
-Sometimes I just want a thing to exist. I built slayply, my job-application helper, in about an hour like that: I described what I wanted, watched what came back, and steered. I call it *monitored* vibe-coding, because I never walk away from it. It's perfect for a personal tool, and it's not how I'd ship something other people depend on.
+Andrej Karpathy named vibe coding: you describe, accept what comes back and keep going. I do that for throwaway tools, but I stay in the room, watching and steering. It's fine for something only I depend on. It isn't how I'd ship something other people rely on, and that's what everything above is for.
 
 ## What I'm still learning
 
-There are things I haven't used properly yet, and I want to, because I can already see how they'd make my days easier:
+These are things I haven't used properly yet, but I can see how they'd help:
 
-- **MCP servers**, so my tools can reach the systems I work with, instead of me pasting context in by hand.
-- **Hooks**, so that checks like formatting and tests run automatically every time, instead of when I remember.
-- **Subagents and skills**, to split a big task into focused helpers and reuse my best prompts.
-- **Evals**, so that when I change a prompt I can tell whether it got better, instead of guessing.
-
-I'll write about each one here as I use it.
+- **Graphify.** It builds a knowledge graph of a codebase, so an agent asks the graph about functions, calls and dependencies instead of grepping and re-reading files. It parses code locally, writes a reusable `graph.json`, and can plug in through MCP. The pitch is fewer tokens and more accurate answers on big repos. I want to try it on a larger codebase, and check its claims before I repeat them.
+- **MCP servers**, so agents reach the systems I work with directly, instead of me pasting context in.
+- **Evals**, so that when I change a prompt I can measure whether it got better.
+- **Parallel sessions**, running several agents on separate branches at once.
 
 ## What I'd change
 
-Not much about the foundation. Specs first, handoff files, and real tests have all held up, and I'd start any project the same way. The change I'm making is the list above: bringing in the tools I haven't tried yet, one at a time, and writing down how each one went.
+My loop is heavy for a small change, and I sometimes skip steps when I'm in a hurry. I'd like a lighter path for one-line fixes that still keeps the tests and the review.
+
+## Sources
+
+- [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices), Anthropic.
+- [Spec Kit](https://github.com/github/spec-kit), GitHub's spec-driven development toolkit.
+- [AGENTS.md](https://agents.md), a shared format for agent instructions.
+- [Graphify](https://github.com/Graphify-Labs/graphify), the codebase knowledge-graph tool.

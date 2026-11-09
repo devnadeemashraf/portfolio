@@ -18,7 +18,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     dim: proj?.oneLiner ?? '',
     name: p.name,
     monogram: p.monogram,
-    right: 'nadeemashraf.cyou/work',
+    right: 'nadeemashraf.cyou/projects',
     fontSize: 72,
   });
 }

@@ -80,6 +80,8 @@ export default config({
           fields.object({
             word: fields.text({ label: 'Headline word (e.g. Full-stack)' }),
             title: fields.text({ label: 'Title line (e.g. Senior Full-Stack Engineer)' }),
+            headline: fields.text({ label: 'Headline (bright part) for this role', multiline: true }),
+            dim: fields.text({ label: 'Headline (dim tail) for this role', multiline: true }),
           }),
           { label: 'Rotating roles (hero flip)', itemLabel: (p) => p.fields.word.value },
         ),
@@ -93,7 +95,10 @@ export default config({
           defaultValue: true,
         }),
         availableLabel: fields.text({ label: 'Availability label' }),
-        workModes: fields.array(fields.text({ label: 'Mode' }), { label: 'Open to: work modes', itemLabel: (p) => p.value }),
+        workModes: fields.array(
+          fields.object({ mode: fields.text({ label: 'Mode' }), note: fields.text({ label: 'Note' }) }),
+          { label: 'Open to: work modes', itemLabel: (p) => p.fields.mode.value },
+        ),
         abroadLabel: fields.text({ label: 'Abroad label (e.g. Abroad · visa sponsorship needed)' }),
         relocation: fields.array(fields.text({ label: 'Country' }), {
           label: 'Open to relocate to (abroad)',
@@ -130,6 +135,10 @@ export default config({
         noticePeriod: fields.text({ label: 'Notice period' }),
         workPreference: fields.text({ label: 'Work preference' }),
         relocationNote: fields.text({ label: 'Relocation' }),
+        qualities: fields.array(
+          fields.object({ title: fields.text({ label: 'Quality' }), text: fields.text({ label: 'Evidence', multiline: true }) }),
+          { label: 'Top selling qualities (do not repeat the résumé)', itemLabel: (p) => p.fields.title.value },
+        ),
         visaNote: fields.text({ label: 'Visa' }),
         highlights: fields.array(fields.text({ label: 'Highlight', multiline: true }), {
           label: 'Highlights (numbers I can back up)',
@@ -152,16 +161,16 @@ export default config({
           statement: fields.text({ label: 'Statement', multiline: true }),
           cta: fields.text({ label: 'Link text' }),
         }, { label: 'Build logs' }),
-        path: fields.object({
+        projects: fields.object({
           label: fields.text({ label: 'Chapter label' }),
           statement: fields.text({ label: 'Statement', multiline: true }),
           cta: fields.text({ label: 'Link text' }),
-        }, { label: 'Path' }),
-        stack: fields.object({
+        }, { label: 'Projects' }),
+        about: fields.object({
           label: fields.text({ label: 'Chapter label' }),
           statement: fields.text({ label: 'Statement', multiline: true }),
           cta: fields.text({ label: 'Link text' }),
-        }, { label: 'Stack' }),
+        }, { label: 'About' }),
         contactLabel: fields.text({ label: 'Contact label' }),
         contactHeadline: fields.text({ label: 'Contact headline', multiline: true }),
         contactLead: fields.text({ label: 'Contact lead', multiline: true }),
@@ -211,6 +220,7 @@ export default config({
       path: 'content/ui',
       schema: {
         navWork: fields.text({ label: 'Nav: Work' }),
+        navProjects: fields.text({ label: 'Nav: Projects' }),
         navLogs: fields.text({ label: 'Nav: Build logs' }),
         navAbout: fields.text({ label: 'Nav: About' }),
         navContact: fields.text({ label: 'Nav: Contact' }),
@@ -255,7 +265,7 @@ export default config({
           label: 'Cover art (used when there is no screenshot)',
           options: [
             { label: 'Blueprint (architecture flow)', value: 'blueprint' },
-            { label: 'Storefront wireframe', value: 'storefront' },
+            { label: 'Storefront wireframe', value: 'storefront' },
           ],
           defaultValue: 'blueprint',
         }),
@@ -282,6 +292,14 @@ export default config({
         title: fields.slug({ name: { label: 'Name' } }),
         tagline: fields.text({ label: 'Tagline', multiline: true }),
         kind: fields.text({ label: 'Kind (e.g. Python package)' }),
+        origin: fields.select({
+          label: 'Where I built it',
+          options: [
+            { label: 'At work (tooling)', value: 'work' },
+            { label: 'Side project', value: 'side' },
+          ],
+          defaultValue: 'side',
+        }),
         status: fields.text({ label: 'Status' }),
         stack: fields.array(fields.text({ label: 'Tool' }), { label: 'Stack', itemLabel: (p) => p.value }),
         repoUrl: fields.text({ label: 'Repo URL' }),

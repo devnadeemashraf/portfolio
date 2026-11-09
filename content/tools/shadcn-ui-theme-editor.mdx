@@ -1,11 +1,15 @@
 ---
 title: shadcn/ui theme editor
-tagline: A theme editor for shadcn/ui, so you can shape a design system's colours and see them live.
+tagline: A web app for shaping a shadcn/ui colour theme and seeing it applied to real components before you copy it.
 kind: Web app
+origin: side
 status: Open source
 stack:
   - TypeScript
   - React
+  - Vite
+  - Redux Toolkit
+  - Tailwind CSS
 repoUrl: https://github.com/devnadeemashraf/shadcn-ui-theme-editor
 siteUrl: ''
 install: ''
@@ -14,12 +18,30 @@ order: 3
 
 ## What it is
 
-A small editor for shadcn/ui themes. You adjust the tokens, you see the components change, and you copy out the result.
+An editor for the colour tokens behind a shadcn/ui theme. A side panel lists the swatches, a preview shows the components wearing them, and light and dark mode are one toggle apart.
+
+It's a side project. I started it in October 2023 and rewrote it from scratch in June 2024 to keep it clean enough for others to contribute to.
 
 ## Why I built it
 
-[placeholder: one or two sentences in your own words: what annoyed you about the existing options?]
+shadcn/ui themes are CSS variables, and the only way to see a change is to edit the variables and reload. I wanted to change a token and watch the whole interface respond.
 
-## Try it
+<Metrics
+  items={[
+    { value: "19", label: "commits, Oct 2023 to Jul 2024" },
+    { value: "60", label: "TypeScript and TSX source files" },
+    { value: "2", label: "preview tabs: a home layout and a blocks gallery" },
+  ]}
+/>
 
-[placeholder: live URL or run instructions, plus a screenshot.]
+## How it's built
+
+The theme lives in a Redux Toolkit slice, so every swatch edit updates one source of truth and the preview re-renders from it. The UI is built from Radix primitives and the same shadcn/ui components it themes, which means the preview is the real thing rather than a mock-up. Colour conversion runs through a small colour library.
+
+## Contributing
+
+The README is still short, and I'd like to finish it. The code is organised so a new preview block or a new token group is a small, self-contained change. Issues and pull requests are welcome on [GitHub](https://github.com/devnadeemashraf/shadcn-ui-theme-editor).
+
+## What I'd change
+
+I'd add export in the formats people paste into a project, and move the app off Redux for something lighter. A theme is small enough that a single store is more than it needs.

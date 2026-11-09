@@ -10,14 +10,19 @@ coreStack:
   - React / Next.js
   - Node.js
   - Python / FastAPI
+  - Go
   - PostgreSQL
   - Redis
   - GCP
 noticePeriod: 30 days from resignation (not serving notice today)
-workPreference: Full-time, remote or hybrid
-relocationNote: Open to relocate to UAE, Saudi Arabia, Singapore, Malaysia, US, UK, Canada
-visaNote: Visa sponsorship required
-highlights:
-  - I run technical intake for 30+ US broker customers, 1,000+ calls
-  - I built a decision-tree service called 1M+ times a day (peaks near 4M)
-  - I cut a 1,000+-condition render from 9 s to 350 ms
+workPreference: "Full-time. Remote with flexible shifts (I can work until 1 AM IST), or on-site and hybrid in the morning shift only."
+relocationNote: Open to relocate to the UAE, Saudi Arabia, Singapore, Malaysia, the US, the UK and Canada
+visaNote: Visa Sponsorship Required. I'm an Indian citizen and already hold a passport.
+qualities:
+  - title: I close the gap between the ask and the build
+    text: I'm the one on the customer call and the one writing the code, so nothing gets lost in a handoff. The spec is agreed before I build, and what ships is what they asked for.
+  - title: I make things that fail safely
+    text: I design for retries, races and bad input first, then prove it with tests built to break the thing. A payment webhook replayed 50 times in parallel still makes exactly one order.
+  - title: I leave work the next person can pick up
+    text: Specs, decision records, handoff notes and small pull requests, so a teammate never starts cold. My latest side project has 23 written design decisions behind it.
+highlights: []

@@ -14,7 +14,7 @@ type Props = {
   resumeSde: string;
   resumeFde: string;
   recruiterTrigger: string;
-  workModes: readonly string[];
+  workModes: readonly { mode: string; note: string }[];
   abroadLabel: string;
   abroad: readonly string[];
   indiaCities: readonly string[];
@@ -43,15 +43,21 @@ export function HeroCard(p: Props) {
           <dl>
             <div>
               <dt>Work mode</dt>
-              <dd className="chips">{p.workModes.map((m) => <span className="chip" key={m}>{m}</span>)}</dd>
-            </div>
-            <div>
-              <dt>{p.abroadLabel}</dt>
-              <dd className="chips">{p.abroad.map((c) => <span className="chip" key={c}>{c}</span>)}</dd>
+              <dd>
+                <ul className="modes">
+                  {p.workModes.map((m) => (
+                    <li key={m.mode}><strong>{m.mode}</strong><span className="muted">{m.note}</span></li>
+                  ))}
+                </ul>
+              </dd>
             </div>
             <div>
               <dt>In India</dt>
               <dd className="chips">{p.indiaCities.map((c) => <span className="chip" key={c}>{c}</span>)}</dd>
+            </div>
+            <div>
+              <dt>{p.abroadLabel}</dt>
+              <dd className="chips">{p.abroad.map((c) => <span className="chip" key={c}>{c}</span>)}</dd>
             </div>
           </dl>
         </div>

@@ -11,7 +11,7 @@ type Props = {
   availableLabel: string;
   resumeSde: string;
   resumeFde: string;
-  ui: { navWork: string; navLogs: string; navAbout: string; navContact: string; resumeLabel: string };
+  ui: { navWork: string; navProjects: string; navLogs: string; navAbout: string; navContact: string; resumeLabel: string };
 };
 
 export function Header({ name, monogram, available, availableLabel, resumeSde, resumeFde, ui }: Props) {
@@ -24,9 +24,10 @@ export function Header({ name, monogram, available, availableLabel, resumeSde, r
         </Link>
 
         <nav aria-label="Primary" className="nav">
-          <Link className="link" href="/#work">{ui.navWork}</Link>
+          <Link className="link" href="/work">{ui.navWork}</Link>
+          <Link className="link" href="/projects">{ui.navProjects}</Link>
           <Link className="link" href="/logs">{ui.navLogs}</Link>
-          <Link className="link" href="/#path">{ui.navAbout}</Link>
+          <Link className="link" href="/about">{ui.navAbout}</Link>
           <Link className="link" href="/#contact">{ui.navContact}</Link>
         </nav>
 

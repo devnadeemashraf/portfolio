@@ -1,32 +1,66 @@
 ---
 title: slayply
-tagline: A local tool that reads a job description, checks how well you fit, and applies in one click, with answers that sound like you.
-kind: Local tool
-status: Works, UX still rough
+tagline: A Chrome side panel that turns a job description and its application questions into answers written from your real background, with your choice of model.
+kind: Chrome extension
+origin: side
+status: v1.1.0, needs real-key testers
 stack:
   - TypeScript
-  - Gemini API
+  - React
+  - WXT
+  - Hono
+  - Zod
 repoUrl: https://github.com/devnadeemashraf/slayply
-siteUrl: ''
+siteUrl: https://slayply-site.onrender.com
 install: ''
 order: 4
 ---
 
 ## What it is
 
-slayply is a tool you run on your own machine to take the grind out of job applications. You bring your own API keys, give it your résumés and your preferences, and it builds a personality from your facts. Then, on any job description, one click does three things: it reads the JD, checks how well you fit, and applies, answering every question the recruiter asks in a human voice.
+Slayply lives in Chrome's side panel. On a job page, you capture the description and the questions. It checks how well you fit, picks the right résumé, and drafts answers, a cover letter or a message. You bring your own key for Claude, OpenAI or Gemini.
 
-## How it works
+It never fills in or submits anything. You read, edit, copy and submit yourself, every time.
 
-- **You bring the keys.** Your API keys stay with you, on your machine.
-- **A fact-based personality.** It's generated from what's true about you, from your résumés and what you tell it, so the answers don't invent things you never did.
-- **Résumés and preferences.** Upload several résumés and say what you're looking for.
-- **One click.** Read the JD, check the fit, apply, and answer the recruiter's questions.
+## Why I built it
 
-## The honest bit
+Job applications ask the same questions in slightly different words, and generic AI drafts read like generic AI drafts. Worse, they invent things: a metric you never hit, a tool you never used. I wanted drafts that can't.
 
-I built it in about an hour of monitored vibe-coding, to solve my own lazy need. I watched what the AI wrote and steered it, rather than letting it run unattended. I've tested it with Gemini API keys in production and it works like a charm. The UX still needs work, and that's the next thing I'll improve.
+<Metrics
+  items={[
+    { value: "11 days", label: "from first commit to v1.1.0, 29 Oct to 9 Nov 2026" },
+    { value: "150+", label: "commits, through pull requests and CI" },
+    { value: "1,100+", label: "test cases, mostly against stubbed providers" },
+    { value: "23", label: "written architecture decisions" },
+  ]}
+/>
 
-## Try it
+## The idea that matters: claim checking
 
-[placeholder: run instructions or a short demo clip.]
+You keep one profile of real facts, and each fact has an ID. Every sentence the model writes about you has to cite one. A deterministic checker then highlights any sentence with no citation, so an invented claim is flagged before it reaches an application.
+
+## How it's built
+
+<Flow
+  caption="Your browser talks to a stateless relay, or straight to the provider in direct mode."
+  nodes={[
+    { title: "Side panel", note: "WXT, React, IndexedDB", highlight: false },
+    { title: "Core", note: "Zod schemas, prompts, claim checker", highlight: true },
+    { title: "Relay", note: "Hono, stateless", highlight: false },
+    { title: "Claude, OpenAI, Gemini", note: "one adapter each", highlight: false },
+  ]}
+/>
+
+It's a monorepo with six packages: the extension, the relay, a static site, a shared core, the provider adapters and a UI kit. Your profile, résumés and keys stay in the browser. The relay keeps nothing, and there is no telemetry.
+
+## How I built it
+
+I wrote the spec and the architecture decisions first, then worked with coding agents inside a harness: a handoff pointer file the agent reads at the start of every session, tests written before the change, and hooks that block risky actions. I describe the whole setup in [How I use AI in my production workflow](/logs/how-i-use-ai-in-my-production-workflow).
+
+## Where it stands
+
+It has had one real-world test: answer generation worked end to end with a real Gemini key, slowly. A fit check on a slow thinking model ran past the relay's time limit, and I've added progress and retry for it. The Claude and OpenAI paths were written from the vendors' documentation and haven't been run live. If you have credits and ten spare minutes, an [issue](https://github.com/devnadeemashraf/slayply/issues/new) saying what broke, or that it worked, helps a lot.
+
+## What I'd change
+
+I'd test against real providers earlier. Almost everything is verified with stubs, which proves the plumbing and says nothing about how real models behave on real job pages.

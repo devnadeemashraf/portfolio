@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${p.title}: case study`,
     description: p.oneLiner,
-    alternates: { canonical: `/work/${slug}` },
-    openGraph: { title: p.title, description: p.oneLiner, type: 'article', url: `/work/${slug}` },
+    alternates: { canonical: `/projects/${slug}` },
+    openGraph: { title: p.title, description: p.oneLiner, type: 'article', url: `/projects/${slug}` },
   };
 }
 
@@ -43,7 +43,7 @@ export default async function CaseStudy({ params }: Props) {
   return (
     <article>
       <div className="container page-head">
-        <Link href="/#work" className="link back"><ArrowLeft size={15} /> All work</Link>
+        <Link href="/projects" className="link back"><ArrowLeft size={15} /> All projects</Link>
         <p className="label">Case study · P{String(idx + 1).padStart(2, '0')}</p>
         <h1 className="display page-title">{project.title}</h1>
         <p className="lead page-lead">{project.oneLiner}</p>
@@ -74,7 +74,7 @@ export default async function CaseStudy({ params }: Props) {
 
       {next && next.slug !== slug && (
         <div className="container next-wrap">
-          <Link href={`/work/${next.slug}`} className="card next-card">
+          <Link href={`/projects/${next.slug}`} className="card next-card">
             <span>
               <span className="label">Next case study</span>
               <span className="h3 next-title">{next.title}</span>

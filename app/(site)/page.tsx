@@ -1,14 +1,11 @@
-import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, Calendar, Download, socialIcon } from '@/components/Icons';
+import { ArrowRight, Calendar, Download, socialIcon } from '@/components/Icons';
 import { SheetTrigger, EmailCopy } from '@/components/Sheets';
-import { AvailabilityPill } from '@/components/AvailabilityPill';
 import { Story } from '@/components/Story';
-import { ProjectCard } from '@/components/ProjectCard';
-import { LogCard } from '@/components/LogCard';
+import { PreviewRow } from '@/components/PreviewRow';
 import { HeroHeading } from '@/components/HeroHeading';
 import { HeroCard } from '@/components/HeroCard';
 import {
-  getAbout, getExperience, getHome, getLogs, getProfile, getProjects, getSocials, getTools, getUi,
+  formatDate, getAbout, getExperience, getHome, getLogs, getProfile, getProjects, getSocials, getTools, getUi,
 } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonld';
 
@@ -17,6 +14,7 @@ export default async function Home() {
     getProfile(), getHome(), getUi(), getProjects(), getLogs(), getAbout(), getExperience(), getSocials(), getTools(),
   ]);
   const featured = projects.filter((x) => x.featured);
+  const sideTools = tools.filter((t) => t.origin === 'side');
   const bookUrl = p.booking?.url ?? '#';
 
   return (
@@ -29,9 +27,7 @@ export default async function Home() {
             <HeroHeading
               name={p.name}
               city={p.city}
-              roles={p.roles.map((r) => ({ word: r.word, title: r.title }))}
-              headline={p.heroHeadline}
-              dim={p.heroHeadlineDim}
+              roles={p.roles.map((r) => ({ word: r.word, title: r.title, headline: r.headline, dim: r.dim }))}
             />
             <p className="lead hero-lead">{p.lead}</p>
             <p className="label scroll-hint">{ui.scrollHint} ↓</p>
@@ -57,63 +53,30 @@ export default async function Home() {
         </div>
       </section>
 
-      <Story id="work" label={home.work.label} statement={home.work.statement} cta={home.work.cta} ctaHref="/#work">
-        {featured.map((proj, i) => (
-          <ProjectCard key={proj.slug} p={proj} index={i} readLabel={ui.readCaseStudy} liveLabel={ui.liveLabel} codeLabel={ui.codeLabel} />
+      <Story id="work" label={home.work.label} statement={home.work.statement} cta={home.work.cta} ctaHref="/work">
+        {experience.map((e) => (
+          <PreviewRow key={e.slug} href="/work" label={`${e.start} — ${e.end}`} title={e.role} text={e.company} />
+        ))}
+      </Story>
+
+      <Story id="projects" label={home.projects.label} statement={home.projects.statement} cta={home.projects.cta} ctaHref="/projects">
+        {featured.slice(0, 1).map((proj) => (
+          <PreviewRow key={proj.slug} href={`/projects/${proj.slug}`} label={proj.status || 'Project'} title={proj.title} text={proj.oneLiner} />
+        ))}
+        {sideTools.slice(0, 2).map((t) => (
+          <PreviewRow key={t.slug} href={`/open-source/${t.slug}`} label={t.kind} title={t.title} text={t.tagline} />
         ))}
       </Story>
 
       <Story id="logs" label={home.logs.label} statement={home.logs.statement} cta={home.logs.cta} ctaHref="/logs">
-        {logs.slice(0, 3).map((l, n) => <LogCard key={l.slug} l={l} index={n} />)}
+        {logs.slice(0, 2).map((l) => (
+          <PreviewRow key={l.slug} href={`/logs/${l.slug}`} label={`${formatDate(l.date)} · ${l.minutes} min read`} title={l.title} text={l.summary} />
+        ))}
       </Story>
 
-      <Story id="path" label={home.path.label} statement={home.path.statement} cta={home.path.cta} ctaHref={p.resumeFde} ctaDownload>
-        <ol className="principles" role="list">
-          {about.principles.map((pr, i) => (
-            <li className="card morph sticky-card" style={{ '--i': i } as React.CSSProperties} key={pr.title}>
-              <p className="label">{String(i + 1).padStart(2, '0')}</p>
-              <h3 className="h3 sm">{pr.title}</h3>
-              <p className="muted">{pr.text}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="label flow-label">Experience</p>
-        <ol className="exp" role="list">
-          {experience.map((e, i) => (
-            <li className="card morph sticky-card" style={{ '--i': i } as React.CSSProperties} key={e.slug}>
-              <p className="label">{e.start} — {e.end}</p>
-              <h3 className="h3 sm">{e.role} <span className="muted at">at {e.company}</span></h3>
-              <p className="muted">{e.impact}</p>
-            </li>
-          ))}
-        </ol>
-        {tools.length > 0 && (
-          <>
-            <p className="label flow-label">Open source</p>
-            <ul className="oss" role="list">
-              {tools.map((t, n) => (
-                <li key={t.slug} className="card morph sticky-card" style={{ '--i': n } as React.CSSProperties}>
-                  <Link href={`/open-source/${t.slug}`} className="card-link">
-                    <p className="label">{t.kind}</p>
-                    <h3 className="h3 sm mono">{t.title}</h3>
-                    <p className="muted">{t.tagline}</p>
-                    <ArrowUpRight className="corner" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </Story>
-
-      <Story id="stack" label={home.stack.label} statement={home.stack.statement} cta={home.stack.cta} ctaHref={p.resumeSde} ctaDownload>
-        {about.stackGroups.map((g, i) => (
-          <div className="card morph stack-group sticky-card" style={{ '--i': i } as React.CSSProperties} key={g.name}>
-            <h3 className="h3 sm">{g.name}</h3>
-            <ul className="chips">
-              {g.tools.map((t) => <li className="chip" key={t}>{t}</li>)}
-            </ul>
-          </div>
+      <Story id="about" label={home.about.label} statement={home.about.statement} cta={home.about.cta} ctaHref="/about">
+        {about.principles.map((pr) => (
+          <PreviewRow key={pr.title} href="/about" label="Principle" title={pr.title} text={pr.text} />
         ))}
       </Story>
 

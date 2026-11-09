@@ -23,9 +23,9 @@ With `pnpm dev` running, open <http://localhost:3000/keystatic>. In development 
 | Recruiter summary | `content/recruiter.yaml` | the 30-second sheet |
 | Home statements | `content/home.yaml` | one plain sentence per chapter; `<Statement>` splits words for you |
 | Socials, Principles and stack, Interface strings | `content/socials.yaml`, `about.yaml`, `ui.yaml` | every visible string comes from content |
-| Projects | `content/projects/*.mdx` | case studies |
+| Projects | `content/projects/*.mdx` | side-project case studies at `/projects/<slug>` |
 | Build logs | `content/logs/*.mdx` | posts; reading time is computed |
-| Open source | `content/tools/*.mdx` | short pages at `/open-source/<slug>` |
+| Open source | `content/tools/*.mdx` | short pages at `/open-source/<slug>`; `origin` decides whether it is listed under Work or Projects |
 | Experience | `content/experience/*.yaml` | |
 
 Turning **Open to roles** off in Profile hides the availability pill, recruiter card, pulse and relocation chip everywhere.

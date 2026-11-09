@@ -1,21 +1,21 @@
 work:
   label: 01 — Work
-  statement: "I take a customer's problem all the way to production: the call, the spec, the schema, the API, the interface and the deploy. Here's what that looks like when it's mine to build."
+  statement: "For five years I've sat in on US freight brokers' calls, turned what they said into specs, then built and run the software myself. The client work is confidential, so here's the shape of it."
+  cta: See my work
+projects:
+  label: 02 — Projects
+  statement: "Outside work I build the things I wish existed, and I keep the code open so you can read it."
   cta: All projects
 logs:
-  label: 02 — Build logs
+  label: 03 — Build logs
   statement: Every project leaves a trail of decisions, so I write them down. You get to see how I think, not just what I shipped.
   cta: All build logs
-path:
-  label: 03 — Path
-  statement: Five years in, I've learned two things. The best code is code your teammates can change without fear, and the best spec is one the customer has already said yes to.
-  cta: Download résumé
-stack:
-  label: 04 — Stack
-  statement: I reach for boring, proven tools, and I'm happy to learn whatever your team already runs on.
-  cta: See the résumé
+about:
+  label: 04 — About
+  statement: I reach for boring, proven tools, and I'd rather leave a codebase my teammates can change without fear.
+  cta: About me
 contactLabel: 05 — Contact
 contactHeadline: Let's build something worth writing about.
-contactLead: "Hiring for a senior role, or have a product that needs an owner? Book a call or write to me, and I'll get back to you within [48 hours]."
+contactLead: "Hiring for a senior role, or have a product that needs an owner? Book a call or write to me, and I'll get back to you as soon as I can."
 closingHeadline: Need someone who owns a feature from the first call to the last deploy?
 closingLead: I'm open to senior software, full-stack and forward deployed roles, in India or abroad. A 15-minute call is the quickest way to see if we fit.

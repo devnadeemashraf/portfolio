@@ -33,7 +33,7 @@ export function ProjectCard({
   codeLabel: string;
 }) {
   return (
-    <article className="card project-card morph sticky-card" style={{ '--i': index } as React.CSSProperties}>
+    <article className={`card project-card sticky-card${index > 0 ? ' morph' : ''}`} style={{ '--i': index } as React.CSSProperties}>
       <ProjectCover p={p} priority={index === 0} />
       <p className="label meta">
         {[p.status || null, p.role, p.year].filter(Boolean).join(' · ')}
@@ -44,7 +44,7 @@ export function ProjectCard({
         {p.stack.map((s) => <li className="chip" key={s}>{s}</li>)}
       </ul>
       <div className="card-actions">
-        <Link href={`/work/${p.slug}`} className="btn btn-primary btn-sm">
+        <Link href={`/projects/${p.slug}`} className="btn btn-primary btn-sm">
           {readLabel} <ArrowRight className="nudge" size={16} />
         </Link>
         {p.liveUrl && (

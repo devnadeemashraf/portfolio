@@ -34,7 +34,7 @@ export default async function ToolPage({ params }: Props) {
   return (
     <article>
       <div className="container page-head">
-        <Link href="/#path" className="link back"><ArrowLeft size={15} /> Open source</Link>
+        <Link href={tool.origin === 'work' ? '/work' : '/projects'} className="link back"><ArrowLeft size={15} /> {tool.origin === 'work' ? 'Work' : 'Projects'}</Link>
         <p className="label">{tool.kind}</p>
         <h1 className="display page-title tool-title">{tool.title}</h1>
         <p className="lead page-lead">{tool.tagline}</p>

@@ -64,7 +64,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
               ...r,
               lookingFor: [...r.lookingFor],
               coreStack: [...r.coreStack],
-              highlights: [...r.highlights],
+              qualities: r.qualities.map((q) => ({ ...q })),
             },
             ui,
             socials: [...socials],
