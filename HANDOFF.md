@@ -17,7 +17,7 @@ First draft complete and committed on `main`. `pnpm build` passes. Routes: `/`, 
 
 ## Decisions made (do not re-litigate)
 
-- Role shown as **Senior Forward Deployed Engineer** (user's call; résumés say Client Solutions Engineer / Forward Deployed Engineer, and the experience entries keep those real titles).
+- Role shown as **Senior** and flips between Forward deployed / Full-stack / Software (user wants to be seen as both SDE and FDE; résumés say Client Solutions Engineer / Forward Deployed Engineer, and the experience entries keep those real titles).
 - Only the two **master résumés** are public (`.gitignore` whitelists them).
 - Five Cal.com links (no Engineering consultation); Technical discussion is 45 min. Primary CTA is the 15-minute intro.
 - No-screenshot covers: `Blueprint` component from `coverNodes` / `coverStats`.
@@ -29,7 +29,6 @@ First draft complete and committed on `main`. `pnpm build` passes. Routes: `/`, 
 
 ## Placeholders / things only the user can fill
 
-- `content/profile.yaml`: **Engineering consultation Cal.com URL is a guess** (`/engineering-consultation`); confirm.
 - `content/home.yaml`: contact lead has `[48 hours]` reply-time placeholder.
 - `content/projects/h-h.mdx`: `liveUrl`/`codeUrl`. Check the facts against reality.
 - LeetCode URL format (`/u/NadeemAshraf`) and the open-source repo URLs (currently the GitHub profile) need checking.
