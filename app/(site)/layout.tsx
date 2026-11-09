@@ -14,6 +14,7 @@ import { SheetsProvider } from '@/components/Sheets';
 import { Analytics } from '@/components/analytics/Analytics';
 import { ScrollFallback } from '@/components/ScrollFallback';
 import { Rumi } from '@/components/easter/Rumi';
+import { RumiPurr } from '@/components/easter/RumiPurr';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' });
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', display: 'swap' });
@@ -83,6 +84,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           <Footer name={p.name} tagline={ui.footerTagline} />
         </SheetsProvider>
         <Rumi />
+        <RumiPurr />
         <ScrollFallback />
         <Analytics />
       </body>

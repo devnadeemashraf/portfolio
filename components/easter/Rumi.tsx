@@ -59,7 +59,7 @@ export function Rumi() {
     const s = {
       x: -200, y: 0, active: false, mode: 'off' as Mode, epoch: 0, asleep: false, voice: false,
       pointer: { x: -1, y: -1 }, lastMove: performance.now(), sleepAnchor: { x: -1, y: -1 },
-      dodgeAt: 0, petAt: 0, pawId: 0, shows: 0,
+      rested: localStorage.getItem('rumi-rest') === 'on', dodgeAt: 0, petAt: 0, pawId: 0, shows: 0,
       ball: { x: 0, y: 0, vx: 0, vy: 0, on: false },
       timers: [] as ReturnType<typeof setTimeout>[],
       bubbleT: undefined as ReturnType<typeof setTimeout> | undefined,
@@ -397,7 +397,7 @@ export function Rumi() {
 
     /* ---------- lifecycle ---------- */
     const show = (from?: { x: number; y: number }) => {
-      if (s.active) return;
+      if (s.active || s.rested) return;
       s.active = true;
       s.shows++;
       setVisible(true);
@@ -425,12 +425,18 @@ export function Rumi() {
       if (s.shows < 3) later(() => show(), rand(60000, 120000), false);
     };
 
-    const first = later(() => show(), rand(9000, 24000), false);
+    const first = later(() => show(), rand(9000, 24000), false); // show() does nothing while he is resting
 
     const onSummon = (e: Event) => {
       const d = (e as CustomEvent<{ x: number; y: number }>).detail;
       clearTimeout(first);
       show({ x: d.x, y: d.y });
+    };
+    /** He decides when he rests (see the footer). Resting hides him and his toys; waking brings him back. */
+    const onRest = (e: Event) => {
+      s.rested = (e as CustomEvent<boolean>).detail;
+      if (s.rested) return stop();
+      if (!reduce.matches) later(() => show(), 1200, false);
     };
     const onVoice = (e: Event) => { s.voice = (e as CustomEvent<boolean>).detail; };
 
@@ -467,6 +473,7 @@ export function Rumi() {
 
     addEventListener('rumi:summon', onSummon);
     addEventListener('rumi:voice', onVoice);
+    addEventListener('rumi:rest', onRest);
     addEventListener('keydown', onKey);
     addEventListener('click', onThrow, true);
 
@@ -489,6 +496,7 @@ export function Rumi() {
       removeEventListener('pointermove', onMove);
       removeEventListener('rumi:summon', onSummon);
       removeEventListener('rumi:voice', onVoice);
+      removeEventListener('rumi:rest', onRest);
       removeEventListener('keydown', onKey);
       removeEventListener('click', onThrow, true);
       reduce.removeEventListener('change', onReduce);

@@ -39,7 +39,12 @@ export function FooterRumi() {
   const [voice, setVoice] = useState(false);
   const n = useRef(0);
   const [age, setAge] = useState('');
-  useEffect(() => setAge(ageNow()), []);
+  const [rest, setRest] = useState(false);
+  const [shake, setShake] = useState(false);
+  useEffect(() => {
+    setAge(ageNow());
+    setRest(localStorage.getItem('rumi-rest') === 'on');
+  }, []);
 
   useEffect(() => setVoice(localStorage.getItem('rumi-voice') === 'on'), []);
 
@@ -56,6 +61,27 @@ export function FooterRumi() {
     }
   }
 
+  /** You can ask. He decides: asking him to rest often gets a "no", and he usually says yes to coming back. */
+  function askRumi() {
+    const wantsRest = !rest;
+    const yes = Math.random() < (wantsRest ? 0.4 : 0.85);
+    track('easter_egg', { name: wantsRest ? 'rumi_rest_ask' : 'rumi_wake_ask', yes });
+    if (!yes) {
+      meow('annoyed', 0.5);
+      setLine('mrrp. (He would rather stay.)');
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setTimeout(() => setLine(null), 3200);
+      return;
+    }
+    meow(wantsRest ? 'sleepy' : 'greet', 0.7);
+    setRest(wantsRest);
+    localStorage.setItem('rumi-rest', wantsRest ? 'on' : 'off');
+    dispatchEvent(new CustomEvent('rumi:rest', { detail: wantsRest }));
+    setLine(wantsRest ? 'prrt. (He is resting.)' : 'mew! (He is back.)');
+    setTimeout(() => setLine(null), 3200);
+  }
+
   function toggleVoice() {
     const next = !voice;
     setVoice(next);
@@ -68,6 +94,9 @@ export function FooterRumi() {
     <div className="footer-rumi">
       <button type="button" className="rumi-voice mono" aria-pressed={voice} onClick={toggleVoice}>
         Rumi&apos;s voice: {voice ? 'on' : 'off'}
+      </button>
+      <button type="button" className="rumi-voice mono" data-shake={shake || undefined} onClick={askRumi}>
+        {rest ? 'Ask Rumi back' : 'Ask Rumi to rest'}
       </button>
       <p className="rumi-line mono" role="status">{line}</p>
       <details className="rumi-care">

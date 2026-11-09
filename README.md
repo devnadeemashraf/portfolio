@@ -82,6 +82,7 @@ A Siamese cat lives on the site, and everything he does is his idea:
 - "Toss a cotton ball" (bottom-right button, or click then click anywhere) and he decides whether it is worth his time. If it is, he wiggles, pounces and bats it around.
 - Typing `rumi` or the Konami code makes it rain paws; the 404 page has him sitting on it. He is built from `content-drafts/pixel_cat_character_rumi.md`: voluntary affection, rest, short cat sounds only, a calm retreat when approached, and an age that follows real calendar time (shown in the footer, with a short "how to treat Rumi" guide).
 - His meows have personalities (greeting, demanding, annoyed, playful, sleepy, curious, smug, purring) and are synthesized with WebAudio at runtime: no audio files, no licences. Direct interactions play sound after a click; ambient meows need the footer "Rumi's voice" toggle.
+- A constant, very soft purr sits under the site (synthesized, fades in on your first tap or key, pauses with the tab). The footer lets you *ask* Rumi to rest; he decides. He often says no, and usually says yes to coming back.
 - All of it is skipped under `prefers-reduced-motion`; the footer keeps a static Rumi.
 
 ## Project map

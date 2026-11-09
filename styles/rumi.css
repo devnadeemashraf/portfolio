@@ -80,3 +80,7 @@ body:has(.rumi-ball-btn[aria-pressed='true']) { cursor: crosshair; }
 .rumi-care ol { display: grid; gap: 8px; margin: 10px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--muted); }
 .rumi-care strong { color: var(--ink); font-weight: 500; }
 .rumi-care-intro { margin: 10px 0 0; font-size: 13px; line-height: 1.5; }
+
+.rumi-voice[data-shake] { animation: no 0.4s steps(4); }
+@keyframes no { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .rumi-voice[data-shake] { animation: none; } }
