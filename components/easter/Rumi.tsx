@@ -20,9 +20,9 @@ const W = 68;
 const H = 40;
 const BALL = 18;
 
-const SAY_DODGE = ['Nope.', 'Hmph.', 'Not today.', 'Rude.', 'Mrp!', 'Too slow.'];
-const SAY_IDLE = ['Mrrrow?', 'Mrrp.', '*stares*', 'Mew!', 'I am here. Obviously.'];
-const SAY_IGNORE = ['…no.', '*yawns*', 'Boring.', 'I saw it. I chose not to.', '*looks away*'];
+const SAY_DODGE = ['mrp.', 'brrt.', 'mrrow.', '…'];
+const SAY_IDLE = ['mrrp?', 'oh?', 'mew', 'prrt?'];
+const SAY_IGNORE = ['…', '*slow blink*', '*looks away*', 'nap time.'];
 const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
 
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -148,15 +148,38 @@ export function Rumi() {
         if (!s.active) return;
         const idle = performance.now() - s.lastMove;
         if (s.pointer.x >= 0 && idle > 5500) return goSleep();
+        // He comes and goes as he likes: sometimes he visits, sometimes he rests, sometimes he has his own plans.
+        const mood = Math.random();
+        if (mood < 0.08) {
+          zoomies();
+          return void later(loop, rand(9000, 14000));
+        }
+        if (mood < 0.35) {
+          const to = spotNear(rand(innerWidth * 0.15, innerWidth * 0.85), rand(innerHeight * 0.3, innerHeight * 0.8), 0, 1);
+          moveTo(to.x, to.y, rand(1500, 2600));
+          return void later(loop, rand(7000, 13000));
+        }
+        if (mood < 0.55) return void later(loop, rand(8000, 14000)); // loafing
         if (s.pointer.x >= 0) {
           const to = spotNear(s.pointer.x, s.pointer.y, 120, 190);
           const dist = Math.hypot(to.x - s.x, to.y - s.y);
-          moveTo(to.x, to.y, Math.max(700, dist * 5));
+          moveTo(to.x, to.y, Math.max(900, dist * 6));
         }
         if (Math.random() < 0.3) later(() => { say(pick(SAY_IDLE)); sound('curious'); }, 900);
-        later(loop, rand(2600, 4800));
+        later(loop, rand(5000, 9000));
       };
       later(loop, 1200);
+    };
+
+    /** A short sprint, a quick turn, a controlled stop. Then he acts as if nothing happened. */
+    const zoomies = () => {
+      sound('playful');
+      for (let k = 0; k < 3; k++) {
+        later(() => {
+          const to = spotNear(rand(innerWidth * 0.2, innerWidth * 0.8), rand(innerHeight * 0.35, innerHeight * 0.8), 0, 1);
+          moveTo(to.x, to.y, 380, false);
+        }, k * 460);
+      }
     };
 
     const goSleep = () => {
@@ -171,7 +194,7 @@ export function Rumi() {
         s.sleepAnchor = { ...s.pointer };
         setPose('sleep');
         say('Zzz…', 0);
-        sound('sleepy');
+        sound('sleepy', false, 0.7);
         track('easter_egg', { name: 'rumi_sleep' });
       }, ms + 60);
     };
@@ -185,8 +208,8 @@ export function Rumi() {
 
     const dash = () => {
       const p = s.pointer.x >= 0 ? s.pointer : center();
-      const to = spotNear(p.x, p.y, 260, 420);
-      moveTo(to.x, to.y, 260);
+      const to = spotNear(p.x, p.y, 180, 300);
+      moveTo(to.x, to.y, 650); // a calm retreat, not a panic
     };
 
     const dodge = () => {
@@ -225,8 +248,8 @@ export function Rumi() {
         s.asleep = false;
         setPose('sit');
         setHearts(false);
-        say('MROW!', 1400);
-        sound('annoyed', true);
+        say('mrr.', 1400);
+        sound('annoyed', true, 0.55);
         track('easter_egg', { name: 'rumi_pet_refused' });
         setMode('follow');
         dash();
@@ -280,7 +303,7 @@ export function Rumi() {
       s.asleep = false;
       setPose('sit');
       setHearts(false);
-      say('Mrp!', 1200);
+      say('mrp!', 1200);
       sound('curious', true);
       track('easter_egg', { name: 'rumi_plays' });
       const bats = 3 + Math.floor(Math.random() * 3);
@@ -299,7 +322,7 @@ export function Rumi() {
       }
       await runToBall();
       if (e !== s.epoch) return;
-      say('Mine.', 2400);
+      say('mine?', 2400);
       sound('smug', true);
       await wait(2800);
       if (e !== s.epoch) return;
@@ -347,7 +370,7 @@ export function Rumi() {
       press() {
         sound('greet', true);
         if (s.mode === 'sleep' && s.asleep) return pet();
-        setBubble('Mrrrow!');
+        setBubble('mew');
         setTimeout(() => setBubble(null), 900);
         if (s.mode === 'follow') dodge();
       },
@@ -441,14 +464,11 @@ export function Rumi() {
       toss(e.clientX, e.clientY);
     };
 
-    const original = document.title;
-    const onVis = () => { document.title = document.hidden ? 'Rumi misses you…' : original; };
 
     addEventListener('rumi:summon', onSummon);
     addEventListener('rumi:voice', onVoice);
     addEventListener('keydown', onKey);
     addEventListener('click', onThrow, true);
-    document.addEventListener('visibilitychange', onVis);
 
     const stop = () => {
       s.timers.forEach(clearTimeout);
@@ -471,9 +491,7 @@ export function Rumi() {
       removeEventListener('rumi:voice', onVoice);
       removeEventListener('keydown', onKey);
       removeEventListener('click', onThrow, true);
-      document.removeEventListener('visibilitychange', onVis);
       reduce.removeEventListener('change', onReduce);
-      document.title = original;
     };
   }, [mounted]);
 

@@ -14,10 +14,7 @@ type Props = {
   resumeSde: string;
   resumeFde: string;
   recruiterTrigger: string;
-  workModes: readonly { mode: string; note: string }[];
-  abroadLabel: string;
-  abroad: readonly string[];
-  indiaCities: readonly string[];
+  openTo: readonly { label: string; info: string }[];
   socials: readonly { label: string; handle: string; url: string }[];
 };
 
@@ -40,26 +37,14 @@ export function HeroCard(p: Props) {
       {p.available && (
         <div className="opento">
           <p className="label">Open to</p>
-          <dl>
-            <div>
-              <dt>Work mode</dt>
-              <dd>
-                <ul className="modes">
-                  {p.workModes.map((m) => (
-                    <li key={m.mode}><strong>{m.mode}</strong><span className="muted">{m.note}</span></li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-            <div>
-              <dt>In India</dt>
-              <dd className="chips">{p.indiaCities.map((c) => <span className="chip" key={c}>{c}</span>)}</dd>
-            </div>
-            <div>
-              <dt>{p.abroadLabel}</dt>
-              <dd className="chips">{p.abroad.map((c) => <span className="chip" key={c}>{c}</span>)}</dd>
-            </div>
-          </dl>
+          <ul className="open-chips">
+            {p.openTo.map((o, i) => (
+              <li key={o.label} className="tip-wrap">
+                <button type="button" className="chip tip" aria-describedby={`opento-${i}`}>{o.label}</button>
+                <span role="tooltip" id={`opento-${i}`} className="tooltip">{o.info}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

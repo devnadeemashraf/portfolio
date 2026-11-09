@@ -5,7 +5,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { ArrowLeft, ArrowUpRight } from '@/components/Icons';
 import { ClosingCta } from '@/components/ClosingCta';
 import { mdxComponents } from '@/components/mdx/Blocks';
-import { CopyCode } from '@/components/mdx/CopyCode';
 import { getHome, getProfile, getTool, getTools, getUi } from '@/lib/content';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -50,12 +49,6 @@ export default async function ToolPage({ params }: Props) {
             </dd>
           </div>
         </dl>
-        {tool.install && (
-          <div className="install">
-            <code className="mono">{tool.install}</code>
-            <CopyCode code={tool.install} />
-          </div>
-        )}
       </div>
 
       <div className="container doc doc-single">

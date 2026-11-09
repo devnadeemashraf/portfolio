@@ -95,16 +95,17 @@ export default config({
           defaultValue: true,
         }),
         availableLabel: fields.text({ label: 'Availability label' }),
-        workModes: fields.array(
-          fields.object({ mode: fields.text({ label: 'Mode' }), note: fields.text({ label: 'Note' }) }),
-          { label: 'Open to: work modes', itemLabel: (p) => p.fields.mode.value },
+        openTo: fields.array(
+          fields.object({
+            label: fields.text({ label: 'Chip' }),
+            info: fields.text({ label: 'Tooltip', multiline: true }),
+          }),
+          { label: 'Open to (chips with tooltips)', itemLabel: (p) => p.fields.label.value },
         ),
-        abroadLabel: fields.text({ label: 'Abroad label (e.g. Abroad · visa sponsorship needed)' }),
         relocation: fields.array(fields.text({ label: 'Country' }), {
           label: 'Open to relocate to (abroad)',
           itemLabel: (p) => p.value,
         }),
-        indiaCities: fields.array(fields.text({ label: 'City' }), { label: 'Open to: Indian cities', itemLabel: (p) => p.value }),
         startDate: fields.text({ label: 'Start date' }),
         email: fields.text({ label: 'Public email' }),
         siteUrl: fields.text({ label: 'Site URL', defaultValue: 'https://nadeemashraf.cyou' }),
@@ -304,7 +305,6 @@ export default config({
         stack: fields.array(fields.text({ label: 'Tool' }), { label: 'Stack', itemLabel: (p) => p.value }),
         repoUrl: fields.text({ label: 'Repo URL' }),
         siteUrl: fields.text({ label: 'Package / site URL (optional)' }),
-        install: fields.text({ label: 'Install / run command (optional)' }),
         order: fields.integer({ label: 'Order', defaultValue: 1 }),
         body: fields.mdx({ label: 'Page', components }),
       },

@@ -76,11 +76,11 @@ PostHog runs cookieless (memory persistence), skips Do-Not-Track visitors, and i
 
 A Siamese cat lives on the site, and everything he does is his idea:
 
-- He walks in at random (or when you press him in the footer), leaves paw trails, and keeps coming back to your cursor, but dodges if you get close.
+- He walks in at random (or when you press him in the footer), leaves paw trails, and keeps coming back to your cursor on his own schedule (he also rests and wanders off), and calmly moves away if you get close.
 - Hold the cursor still and he comes to nap beside it. Move and he wakes and follows.
 - Touch him while he sleeps and he decides: a purr and a pet, or a grumpy dash away.
 - "Toss a cotton ball" (bottom-right button, or click then click anywhere) and he decides whether it is worth his time. If it is, he wiggles, pounces and bats it around.
-- Typing `rumi` or the Konami code makes it rain paws; a hidden tab reads "Rumi misses you"; the 404 page has him sitting on it.
+- Typing `rumi` or the Konami code makes it rain paws; the 404 page has him sitting on it. He is built from `content-drafts/pixel_cat_character_rumi.md`: voluntary affection, rest, short cat sounds only, a calm retreat when approached, and an age that follows real calendar time (shown in the footer, with a short "how to treat Rumi" guide).
 - His meows have personalities (greeting, demanding, annoyed, playful, sleepy, curious, smug, purring) and are synthesized with WebAudio at runtime: no audio files, no licences. Direct interactions play sound after a click; ambient meows need the footer "Rumi's voice" toggle.
 - All of it is skipped under `prefers-reduced-motion`; the footer keeps a static Rumi.
 

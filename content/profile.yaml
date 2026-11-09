@@ -24,24 +24,13 @@ lead: >-
   for the right team.
 available: true
 availableLabel: Open to new roles
-workModes:
-  - mode: Remote
-    note: Flexible shifts. I can collaborate until 1 AM IST, and I already work 4 PM to 1 AM for US overlap.
-  - mode: On-site or hybrid
-    note: Morning shifts only.
-indiaCities:
-  - Hyderabad
-  - Noida
-  - Delhi NCR
-  - Gurgaon
-  - Pune
-  - Bengaluru
-  - Mumbai
-  - Chennai
-  - Ahmedabad
-  - Kolkata
-  - Kochi
-abroadLabel: Abroad · Visa Sponsorship Required
+openTo:
+  - label: Remote
+    info: I'm working US hours today, so overlap with US teams is already comfortable. Flexible on shifts.
+  - label: India
+    info: On-site or hybrid, morning shifts only. Hyderabad, Noida, Delhi NCR, Gurgaon, Pune, Bengaluru, Mumbai, Chennai, Ahmedabad, Kolkata, Kochi.
+  - label: Abroad
+    info: UAE, Saudi Arabia, Singapore, Malaysia, US, UK and Canada. Visa Sponsorship Required. I'm an Indian citizen and already hold a passport.
 relocation:
   - UAE
   - Saudi Arabia

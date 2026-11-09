@@ -1,7 +1,7 @@
 ---
 title: 'Building nadeemashraf.cyou: a portfolio that reads like a build log'
 date: 2026-11-08
-summary: How I designed and built a portfolio that works for a 30-second skim and a 10-minute read, on Next.js, Keystatic and Vercel, with a cat who has opinions.
+summary: How I built a portfolio that works for a 30-second skim and a 10-minute read, on Next.js, Keystatic and Vercel, with the decisions behind each page.
 tags:
   - Next.js
   - Design
@@ -9,11 +9,23 @@ tags:
 
 ## Why a portfolio should tell a story
 
-Most portfolios I looked at were lists: a grid of projects, a wall of logos, a contact form. They told me what someone had touched, not how they think.
+Most portfolios I looked at were lists: a grid of projects, a wall of logos, a contact form. They showed what someone had touched, not how they think.
 
-Recruiters skim, so the page has to work at two speeds: a thirty-second scan for the facts, and a slower read for anyone who wants to see how I make decisions. That became the brief. Every section is a chapter, and every chapter is a commit on a single line running down the page.
+Recruiters skim, so the site has to work at two speeds: a thirty-second scan for the facts, and a slower read for anyone who wants to see how I make decisions. That was the brief. The home page is the skim, and every section opens onto its own page for the slow read.
 
-My work is a second constraint. I'm both a software engineer and a forward deployed engineer: I sit between a customer's problem and the code that solves it, and then I write the code. So the site needed a recruiter's summary one tap away, every way of booking a call in view, and a reason to stay for the longer stories.
+I'm both a software engineer and a forward deployed engineer, so the site has to say that honestly. The headline flips between the roles, and each role gets its own sentence. Only the forward deployed one talks about customer calls, because that's the role that takes them.
+
+## One page per section, and a light home
+
+My first version put everything on the home page, with stacks of cards for work, projects, logs and skills. It was a lot to take in. I moved the detail out.
+
+Home is now a hero and four short previews: Work, Projects, Build logs and About. Each preview is a few quiet rows that lead to a page with more content, and each page leads to the item itself. A reader decides how deep to go at every step.
+
+<Decision
+  chose="Short previews on the home page that open onto one page per section."
+  because="A visitor with thirty seconds sees everything that exists, and a visitor with ten minutes isn't forced through a wall of cards to reach it."
+  tradeoff="More routes to build and keep consistent, and one more click to reach any detail."
+/>
 
 ## Picking the stack
 
@@ -27,13 +39,13 @@ There is no database. Projects, posts and my profile live as MDX and YAML files 
   tradeoff="Every edit is a commit, so changes go live only after a short Vercel rebuild."
 />
 
-Everything visible on the site comes from that content. A single checkbox in my profile, "open to roles", hides the availability pill, the recruiter card, the pulse and the relocation chip at once, because they all read the same field.
+Everything visible on the site comes from that content. A single checkbox in my profile, "open to roles", hides the availability pill, the recruiter card and the pulse at once, because they all read the same field.
 
 ## Text that fills as you read
 
-Each chapter on the home page opens with one sentence pinned on the left. As you scroll, its words turn from dim gray to white, one by one, while the projects slide in on the right. It uses CSS scroll-driven animations, so there are no scroll listeners in JavaScript. If your system asks for reduced motion, the sentence is simply white from the start.
+Each preview on the home page opens with one sentence pinned on the left. As you scroll, its words turn from dim gray to white, one by one. It uses CSS scroll-driven animations, so there are no scroll listeners in JavaScript. If your system asks for reduced motion, the sentence is simply white from the start.
 
-The rule I kept coming back to: the resting state is the finished page. Animation only ever starts from a dimmer state and returns to it, so a browser that cannot animate shows everything, fully readable.
+The rule I kept coming back to: the resting state is the finished page. Animation only ever starts from a dimmer state and returns to it, so a browser that can't animate shows everything, fully readable.
 
 <Code
   filename="story.css"
@@ -54,6 +66,16 @@ The rule I kept coming back to: the resting state is the finished page. Animatio
 
 Firefox has no scroll-driven animations yet. There, a tiny IntersectionObserver fallback loads only when the feature check fails and drives the same effect.
 
+## Cards that stack, one section at a time
+
+On the inner pages, cards stick and stack as you scroll, so a fast scroll can't skip past one before you've read it. The rule I settled on is that stacking belongs to a section. Each group of cards lives in its own container, so when a group ends, its cards release and the next group starts stacking from scratch. Anything that isn't a group of cards simply scrolls.
+
+It's a plain CSS rule: `position: sticky` only holds inside its parent, so giving each group its own parent is the whole trick. It only turns on when the window is tall enough to show a whole card, and the first card in a group never fades in, so the page doesn't open on a blur.
+
+## Glass
+
+The things that float above the page, such as the navigation bar, the sheets, the menu and the tooltips, are translucent with a backdrop blur. It keeps the page feeling like one surface and shows depth without adding colour. Where a browser doesn't support backdrop blur, they fall back to a solid surface.
+
 ## Making it findable
 
 Each page sets its own title and description through the Metadata API, the sitemap and robots files are generated at build time, and every post gets its own Open Graph image. The home page also describes me to search engines with structured data.
@@ -72,12 +94,12 @@ Each page sets its own title and description through the Metadata API, the sitem
 }`}
 />
 
-For learning how people actually use the site, I wanted free tools only: Vercel's analytics and Speed Insights for visitors and performance, and PostHog's free tier for clicks and sections reached, running without cookies.
+For learning how people use the site, I wanted free tools only: Vercel's analytics and Speed Insights for visitors and performance, and PostHog's free tier for clicks and sections reached, running without cookies.
 
 ## Rumi
 
-There's a Siamese cat on this site. His name is Rumi. He's loud, he's clingy, and he does not want to be held. You may see him walk across the screen, nap next to your cursor if you hold still, or ignore a cotton ball you throw him. Try to catch him and he won't be there. Everything that happens is his idea, not yours.
+There's a Siamese cat on this site. His name is Rumi, and he's written up as a character before he was drawn: a young adult who is curious, affectionate and independent, and who decides when. He comes over, naps near your cursor if you hold still, ignores a cotton ball or pounces on it, and walks away when he's had enough. He communicates with short sounds and body language, never sentences, and he never guilts you for leaving. Everything he does is his idea, not yours.
 
 ## What I'd change
 
-Honestly, not much. Writing the decisions down as I went meant I made them on purpose, and I'd make the same ones again: content as files, motion from CSS, and a resting state that's always readable. The one thing I'll keep working on is the Firefox fallback, which uses a coarser version of the same effect until browsers catch up. Everything else I'd rather leave alone.
+Honestly, not much. Writing the decisions down as I went meant I made them on purpose, and I'd make the same ones again: content as files, motion from CSS, and a resting state that's always readable. The thing I'll keep working on is the Firefox fallback, which uses a coarser version of the same effect until browsers catch up.

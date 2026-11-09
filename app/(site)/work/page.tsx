@@ -19,12 +19,12 @@ export default async function WorkPage() {
       <PageHead
         label={home.work.label}
         title="Work"
-        lead="Client projects are confidential, so I can't show them. What I can show is how I work, and the tooling I built along the way and open-sourced."
+        lead="At AVRL I built the company's own internal products, then used them to work with clients while building more of their solutions. Those products are confidential and protected by patents, so I can't show them. Here's where I've worked, and the tooling I could open-source."
       />
       <div className="container page-body">
         <div className="flow">
           <p className="label">Experience</p>
-          <ol className="exp" role="list">
+          <ol className="stack-list" role="list">
             {experience.map((e, i) => (
               <li className={`card sticky-card${i > 0 ? ' morph' : ''}`} style={{ '--i': i } as React.CSSProperties} key={e.slug}>
                 <p className="label">{e.start} — {e.end}</p>
@@ -36,8 +36,8 @@ export default async function WorkPage() {
           {atWork.length > 0 && (
             <>
               <p className="label flow-label">Tooling I built at work, and open-sourced</p>
-              <div className="oss">
-                {atWork.map((t, i) => <ToolCard key={t.slug} t={t} index={i + experience.length} />)}
+              <div className="stack-list">
+                {atWork.map((t, i) => <ToolCard key={t.slug} t={t} index={i} />)}
               </div>
             </>
           )}

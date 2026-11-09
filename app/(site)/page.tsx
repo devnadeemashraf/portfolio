@@ -44,10 +44,7 @@ export default async function Home() {
             resumeSde={p.resumeSde}
             resumeFde={p.resumeFde}
             recruiterTrigger={ui.recruiterTrigger}
-            workModes={p.workModes}
-            abroadLabel={p.abroadLabel}
-            abroad={p.relocation}
-            indiaCities={p.indiaCities}
+            openTo={p.openTo.map((o) => ({ label: o.label, info: o.info }))}
             socials={socials}
           />
         </div>

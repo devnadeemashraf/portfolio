@@ -5,12 +5,31 @@ import { RumiSprite } from './RumiSprite';
 import { meow } from '@/lib/meow';
 import { track } from '../analytics/track';
 
-const LINES = [
-  'Mrrrow! (He wants you to know he is very busy.)',
-  'He will sit exactly where you were about to click.',
-  'Do not try to pick him up. He has filed a complaint.',
-  'Rumi is vocal. Rumi is clingy. Rumi is not a lap cat.',
-];
+const LINES = ['mew', 'mrrp?', 'oh?', 'prrt.'];
+
+/** Estimated date of birth (the owner's real date wins once known). Age follows real calendar time. */
+const BORN = { y: 2024, m: 12, d: 9 };
+
+function ageNow(now = new Date()) {
+  let y = now.getUTCFullYear() - BORN.y;
+  let m = now.getUTCMonth() + 1 - BORN.m;
+  let d = now.getUTCDate() - BORN.d;
+  if (d < 0) {
+    d += new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 0)).getUTCDate();
+    m -= 1;
+  }
+  if (m < 0) { m += 12; y -= 1; }
+  const part = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
+  return `${part(y, 'year')}, ${part(m, 'month')}, ${part(d, 'day')}`;
+}
+
+const CARE = [
+  ['Let him notice you.', 'Move calmly and give him a moment to come over.'],
+  ['Offer, don’t force.', 'Hold still near him and let him choose to lean in.'],
+  ['Watch his signals.', 'A raised tail is a greeting. A lashing tail or a turned head means space, please.'],
+  ['Let him leave.', 'Walking away is communication, not rejection.'],
+  ['Play fair.', 'A wiggle means a pounce is coming. Let him win.'],
+] as const;
 
 /** Static Rumi in the footer: the only Rumi under reduced motion. Click and he runs off. */
 export function FooterRumi() {
@@ -19,6 +38,8 @@ export function FooterRumi() {
   const [gone, setGone] = useState(false);
   const [voice, setVoice] = useState(false);
   const n = useRef(0);
+  const [age, setAge] = useState('');
+  useEffect(() => setAge(ageNow()), []);
 
   useEffect(() => setVoice(localStorage.getItem('rumi-voice') === 'on'), []);
 
@@ -49,6 +70,13 @@ export function FooterRumi() {
         Rumi&apos;s voice: {voice ? 'on' : 'off'}
       </button>
       <p className="rumi-line mono" role="status">{line}</p>
+      <details className="rumi-care">
+        <summary className="mono">Rumi{age ? `, ${age} old (estimated)` : ''}</summary>
+        <p className="rumi-care-intro">A young Siamese. Affectionate, curious and independent, and he decides when.</p>
+        <ol>
+          {CARE.map(([t, x]) => <li key={t}><strong>{t}</strong> {x}</li>)}
+        </ol>
+      </details>
       <button
         ref={ref}
         type="button"

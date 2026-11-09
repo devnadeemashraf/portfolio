@@ -1,17 +1,17 @@
 :root {
-  /* Rumi is a Siamese: cream body, seal-brown points, blue eyes. The one splash of colour on the site. */
-  --rumi-body: #f0e2c9;
-  --rumi-points: #4a3326;
-  --rumi-eye: #5aa9e6;
-  --rumi-pupil: #1c130d;
-  --rumi-nose: #b8796a;
+  /* Rumi is a seal-point Siamese: warm ivory body, deep seal-brown points, clear blue eyes. The one splash of colour on the site. */
+  --rumi-body: #e8dccb;
+  --rumi-points: #4b302b;
+  --rumi-eye: #72b9e6;
+  --rumi-pupil: #2a2225;
+  --rumi-nose: #a96f72;
 }
 :root[data-theme='light'] {
-  --rumi-body: #e9d6b4;
-  --rumi-points: #3d281c;
-  --rumi-eye: #3f93d8;
-  --rumi-pupil: #140d08;
-  --rumi-nose: #a8675a;
+  --rumi-body: #e2d3bd;
+  --rumi-points: #432a26;
+  --rumi-eye: #5fa8d8;
+  --rumi-pupil: #2a2225;
+  --rumi-nose: #a96f72;
 }
 
 .rumi-layer { position: fixed; inset: 0; z-index: 15; pointer-events: none; overflow: hidden; }
@@ -71,3 +71,12 @@ body:has(.rumi-ball-btn[aria-pressed='true']) { cursor: crosshair; }
   .rumi-layer { display: none; }
 }
 @media print { .rumi-layer, .footer-rumi { display: none; } }
+
+.rumi-care { flex-basis: 100%; text-align: right; font-size: 12px; color: var(--muted); }
+.rumi-care summary { cursor: pointer; display: inline-block; min-height: 24px; list-style: none; }
+.rumi-care summary::-webkit-details-marker { display: none; }
+.rumi-care summary:hover { color: var(--ink); }
+.rumi-care[open] { text-align: left; max-width: 420px; margin-left: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-3); background: color-mix(in oklab, var(--surface) 75%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.rumi-care ol { display: grid; gap: 8px; margin: 10px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.rumi-care strong { color: var(--ink); font-weight: 500; }
+.rumi-care-intro { margin: 10px 0 0; font-size: 13px; line-height: 1.5; }

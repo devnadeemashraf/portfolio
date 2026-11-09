@@ -20,7 +20,7 @@ export default async function AboutPage() {
       <div className="container page-body">
         <div className="flow">
           <p className="label">How I work</p>
-          <ol className="principles" role="list">
+          <ol className="stack-list" role="list">
             {about.principles.map((pr, i) => (
               <li className={`card sticky-card${i > 0 ? ' morph' : ''}`} style={{ '--i': i } as React.CSSProperties} key={pr.title}>
                 <p className="label">{String(i + 1).padStart(2, '0')}</p>
@@ -30,14 +30,16 @@ export default async function AboutPage() {
             ))}
           </ol>
           <p className="label flow-label">What I reach for</p>
-          {about.stackGroups.map((g, i) => (
-            <div className="card stack-group sticky-card morph" style={{ '--i': i + about.principles.length } as React.CSSProperties} key={g.name}>
-              <h2 className="h3 sm">{g.name}</h2>
-              <ul className="chips">
-                {g.tools.map((t) => <li className="chip" key={t}>{t}</li>)}
-              </ul>
-            </div>
-          ))}
+          <div className="stack-list">
+            {about.stackGroups.map((g, i) => (
+              <div className={`card stack-group sticky-card${i > 0 ? ' morph' : ''}`} style={{ '--i': i } as React.CSSProperties} key={g.name}>
+                <h2 className="h3 sm">{g.name}</h2>
+                <ul className="chips">
+                  {g.tools.map((t) => <li className="chip" key={t}>{t}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
           <p className="about-links">
             <a className="btn btn-ghost" href={profile.resumeFde} download data-track="resume_download" data-label="fde"><Download /> {ui.resumeLabel}</a>
             <Link className="link" href="/logs/how-i-use-ai-in-my-production-workflow">How I use AI day to day <ArrowRight size={15} /></Link>
