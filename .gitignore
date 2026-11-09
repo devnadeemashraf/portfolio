@@ -1,0 +1,20 @@
+# deps / build
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+.env*
+!.env.example
+.DS_Store
+npm-debug.log*
+
+# Local files
+design/
+content-drafts/
+
+# Only the two master résumés are public
+public/resume/*
+!public/resume/Nadeem_Ashraf_SDE_Master.pdf
+!public/resume/Nadeem_Ashraf_FDE_Master.pdf
